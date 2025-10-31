@@ -21,12 +21,25 @@ st.header("Project Intro")
 
 st.header("Data overview")
 
-col_data, _, col_chart = st.columns((0.8, 0.005, 1))
 
-with col_data:
-    st.subheader("Raw Data")
-    st.dataframe(df_disney)
+with st.sidebar:
+    user_input_password = st.text_input("Enter your password", width=300)
 
-with col_chart:
-    st.subheader("Data Overview")
-    st.markdown("Placeholder for chart")
+true_pw = st.secrets["true_password"]
+
+
+
+st.header(user_input_password) # now we return the password
+
+if user_input_password == true_pw:
+    st.subheader("This is a secret page")
+
+    col_data, _, col_chart = st.columns((0.8, 0.005, 1))
+
+    with col_data:
+        st.subheader("Raw Data")
+        st.dataframe(df_disney)
+
+    with col_chart:
+        st.subheader("Data Overview")
+        st.markdown("Placeholder for chart")
