@@ -22,7 +22,10 @@ homepage =st.Page("pages/homepage.py", title= "Homepage")
 
 data_page = st.Page("pages/data_overview.py")
 
-user_pages = [homepage, data_page]
+econinsight_page = st.Page("pages/""EconInsight.py")
+econviz_page = st.Page("pages/""EconViz.py")
+
+user_pages = [homepage, data_page, econinsight_page, econviz_page]
 
 pg = st.navigation(user_pages, position="sidebar", expanded=True)
 
