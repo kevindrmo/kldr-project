@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 
-st.set_option("kldr-final-project", page_icon = "📊", layout = "wide")
+st.set_page_config("kldr-final-project", page_icon = "📊", layout = "wide")
 
 st.title("Sample Project")
 
