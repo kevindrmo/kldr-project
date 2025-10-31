@@ -1,3 +1,3 @@
-from utils.common_imports import *
+from app.utils.common_imports import *
 
 st.title("EconInsight")
