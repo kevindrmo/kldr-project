@@ -11,6 +11,9 @@ from pathlib import Path
 # think about how you want to present it in the end --> power point? only showing app? html presentation? maybe an html presentation that accesses my streamlit page?
 # dashboard data overview, analysis page ....
 
+
+# in scripts: data-cleaning before --> only put clean data in the actual app
+
 st.set_page_config("kldr-final-project", page_icon = "📊", layout = "wide")
 
 # within the app ONLY define my pages!
