@@ -29,6 +29,7 @@ data_assistant = st.Page("pages/data_assistant.py",
                         title="Data Assistant",
                         icon = "⚙️")
 data_page = st.Page("pages/data_overview.py",
+                    title="Data Overview",
                     icon="📋")
 
 econinsight_page = st.Page("pages/""EconInsight.py",
