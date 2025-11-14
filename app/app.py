@@ -18,9 +18,14 @@ st.set_page_config("kldr-final-project", page_icon = "📊", layout = "wide")
 
 # within the app ONLY define my pages!
 
-homepage =st.Page("pages/homepage.py",
-                title= "Homepage",
+homepage1 =st.Page("pages/homepage1.py",
+                title= "Homepage1",
                 icon="🏠")
+
+homepage2 =st.Page("pages/homepage2.py",
+                title= "Homepage2",
+                icon="🏠")
+
 
 briefing_page = st.Page("pages/Briefing.py",
                     icon = "📢")
@@ -32,12 +37,13 @@ data_page = st.Page("pages/data_overview.py",
                     title="Data Overview",
                     icon="📋")
 
-econinsight_page = st.Page("pages/""EconInsight.py",
+econinsight_page = st.Page("pages/EconInsight.py",
                         icon="💡")
-econviz_page = st.Page("pages/""EconViz.py",
+econviz_page = st.Page("pages/EconViz.py",
                     icon= "🔮")
 
-user_pages = [homepage, briefing_page, data_assistant, data_page, econinsight_page, econviz_page]
+
+user_pages = [homepage1, homepage2, briefing_page, data_assistant, data_page, econinsight_page, econviz_page]
 
 pg = st.navigation(user_pages, position="sidebar", expanded=True)
 

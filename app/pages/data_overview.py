@@ -49,3 +49,11 @@ st.markdown("""
     <p class="dataoverview-subtitle">Visualizing Insights Across Your Dataset</p>
     <p class="dataoverview-tagline">From Raw Numbers to Clear Understanding</p>
 """, unsafe_allow_html=True)
+
+
+ROOT = Path(__file__).parent.parent
+df_unctad = pd.read_csv(ROOT/"data"/"UNCTAD_DE_WIDEF.csv")
+
+st.subheader("Raw Dataset:")
+
+st.dataframe(df_unctad)
