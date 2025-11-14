@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from pathlib import Path
-
+ROOT = Path(__file__).parent.parent
 
 
 st.markdown("""
@@ -135,7 +135,7 @@ with col_econinsight:
             💡 EconInsight: Data Analysis
         </h3>
     """, unsafe_allow_html=True)
-    st.page_link("pages/EconINsight.py", label="Go to EconInsight")
+    st.page_link(ROOT/"pages"/"EconInsight.py", label="Go to EconInsight")
     st.markdown("""
         <div class="question-card">
             <div class="question-title">🌍 Question 1: Global Digital Trade</div>
@@ -168,7 +168,7 @@ with col_econviz:
             🔮 EconViz: Visual Storytelling
         </h3>
     """, unsafe_allow_html=True)
-    st.page_link("pages/EconINsight.py", label="Go to EconViz")
+    st.page_link(ROOT/"pages"/"EconINsight.py", label="Go to EconViz")
     
     st.markdown("""
         <div class="question-card">
