@@ -168,7 +168,7 @@ with col_econviz:
             🔮 EconViz: Visual Storytelling
         </h3>
     """, unsafe_allow_html=True)
-    st.page_link("pages/EconINsight.py", label="Go to EconViz")
+    st.page_link("pages/EconViz.py", label="Go to EconViz")
     
     st.markdown("""
         <div class="question-card">
