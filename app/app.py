@@ -27,7 +27,7 @@ homepage2 =st.Page("pages/homepage2.py",
                 icon="🏠")
 
 
-must_know_page = st.Page("pages/Must-Know.py",
+must_know_page = st.Page("pages/must-know.py",
                     icon = "📢",
                     title = "Must-Know")
 
