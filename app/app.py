@@ -27,8 +27,9 @@ homepage2 =st.Page("pages/homepage2.py",
                 icon="🏠")
 
 
-briefing_page = st.Page("pages/Briefing.py",
-                    icon = "📢")
+briefing_page = st.Page("pages/Must-know.py",
+                    icon = "📢",
+                    title = "Must-Know")
 
 data_assistant = st.Page("pages/data_assistant.py",
                         title="Data Assistant",

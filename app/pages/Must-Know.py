@@ -2,7 +2,7 @@ from utils.common_imports import *
 
 st.markdown("""
     <style>
-        .briefing-title {
+        .must-know-title {
             font-size: 72px;
             font-weight: 700;
             color: #FF8C00;  /* Dark Orange */
@@ -18,7 +18,7 @@ st.markdown("""
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .briefing-subtitle {
+        .must-know-subtitle {
             font-size: 28px;
             font-weight: 500;
             text-align: center;
@@ -36,7 +36,7 @@ st.markdown("""
             }
         }
 
-        .briefing-tagline {
+        .must-know-tagline {
             font-size: 18px;
             font-weight: 300;
             text-align: center;
@@ -62,9 +62,9 @@ st.markdown("""
         }
     </style>
 
-    <h1 class="briefing-title">Briefing</h1>
-    <p class="briefing-subtitle">Must-Know Data at Your Fingertips</p>
-    <p class="briefing-tagline">Clean, tidy, and ready for exploration</p>
+    <h1 class="must-know-title">Must-Know</h1>
+    <p class="must-know-subtitle">Must-Know Data at Your Fingertips</p>
+    <p class="must-know-tagline">Clean, tidy, and ready for exploration</p>
     <p class="tidy-link">
         Learn more about <a href="https://r4ds.had.co.nz/tidy-data.html" target="_blank">Tidy Data</a>
     </p>
