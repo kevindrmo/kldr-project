@@ -278,6 +278,6 @@ either is it interpreting or to do some calculation with it, we have alter its s
 
 st.markdown("""
 #### 🔍 2 Inspecting the Dataset:
-        - Using .describe() gives us the variables --> since columns are""")
+        - Using .describe() gives us the variables --> since columns are """)
 
 
