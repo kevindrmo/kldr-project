@@ -27,7 +27,7 @@ homepage2 =st.Page("pages/homepage2.py",
                 icon="🏠")
 
 
-briefing_page = st.Page("pages/Must-know.py",
+must_know_page = st.Page("pages/Must-know.py",
                     icon = "📢",
                     title = "Must-Know")
 
@@ -44,7 +44,7 @@ econviz_page = st.Page("pages/EconViz.py",
                     icon= "🔮")
 
 
-user_pages = [homepage1, homepage2, briefing_page, data_assistant, data_page, econinsight_page, econviz_page]
+user_pages = [homepage1, homepage2, must_know_page, data_assistant, data_page, econinsight_page, econviz_page]
 
 pg = st.navigation(user_pages, position="sidebar", expanded=True)
 
