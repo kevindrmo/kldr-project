@@ -203,6 +203,18 @@ with col_econviz:
 # Preview Chart
 st.subheader("📊 Preview: Top Digital Exporters")
 #top_exporters = df.nlargest(10, 'digital_exports')
+
+table_top9 = pd.read_csv(ROOT/"data"/"output"/"table_top10_exporters.csv")
+
+st.dataframe(table_top9, use_container_width=True)
+
+html_table_top9 = (ROOT/"data"/"output"/"interactive_styled_exporters.html").read_text(encoding="utf-8")
+
+col1, col2, col3 = st.columns([2, 3, 2])
+with col2:
+    st.markdown(html_table_top9, unsafe_allow_html=True)
+
+
 #fig = px.bar(top_exporters, x='digital_exports', y='country', orientation='h',
 color_continuous_scale=['#0f3460', '#ff8800']
 #st.plotly_chart(fig, use_container_width=True)
