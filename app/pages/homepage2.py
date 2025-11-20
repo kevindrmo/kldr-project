@@ -206,9 +206,12 @@ st.subheader("📊 Preview: Top Digital Exporters")
 
 table_top9 = pd.read_csv(ROOT/"data"/"output"/"table_top10_exporters.csv")
 
-st.dataframe(table_top9, use_container_width=True)
+#st.dataframe(table_top9, use_container_width=True)
 
 html_table_top9 = (ROOT/"data"/"output"/"interactive_styled_exporters.html").read_text(encoding="utf-8")
+
+for _ in range(3):
+    st.write("")
 
 col1, col2, col3 = st.columns([2, 3, 2])
 with col2:
@@ -221,5 +224,5 @@ color_continuous_scale=['#0f3460', '#ff8800']
 
 st.markdown("""
 ---
-**👉 Start exploring:** Use the sidebar to navigate to different analyses.
+### **👉 Start exploring:** Use the sidebar to navigate to different analyses.
 """)
