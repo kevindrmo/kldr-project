@@ -1,4 +1,5 @@
 from utils.common_imports import *
+import plotly.express as px
 
 IN_QUESTION1 = ROOT/"data"/"output"/"question1" # ROOT has already app in it
 
@@ -62,6 +63,32 @@ st.subheader("Digital Export and Import Visualitzion")
 
 df_exports_imports = pd.read_csv(IN_QUESTION1/ "df_exports_imports.csv")
 
-st.dataframe(df_exports_imports)
+# ------------DATA Filtering -------------------
+
+# Let user select export or import
+
+indicator_choice = st.selectbox(
+    "Select an Indicator to Display:",
+    df_exports_imports["indicator_name"].unique()
+)
+
+# Filter Dataframe to user's choice
+
+df_to_plot = df_exports_imports[df_exports_imports["indicator_name"] == indicator_choice]
+
+# Plot 
+
+fig = px.choropleth(
+    data_frame= df_to_plot,
+    locations= "country_code",
+    color= "value",
+    hover_name= "country_name",
+    animation_frame= "year",
+    projection= "natural earth",
+    title=f"{indicator_choice.replace("_", " ")} Over Time"
+)
+
+st.plotly_chart(fig)
+
 
 
