@@ -1,5 +1,7 @@
 from utils.common_imports import *
 
+IN_QUESTION1 = ROOT/"data"/"output"/"question1" # ROOT has already app in it
+
 st.markdown("""
     <style>
         .econinsight-title {
@@ -49,5 +51,17 @@ st.markdown("""
     <p class="econinsight-subtitle">Democratizing Econometric Analysis</p>
     <p class="econinsight-tagline">AI-Powered Data Understanding</p>
 """, unsafe_allow_html=True)
+
+
+st.title("Question 1: Global Digital Trade")
+st.subheader("Which countries lead in digital service exports? How has digital trade evolved over the past decade?")
+
+
+st.subheader("Digital Export and Import Visualitzion")
+
+
+df_exports_imports = pd.read_csv(IN_QUESTION1/ "df_exports_imports.csv")
+
+st.dataframe(df_exports_imports)
 
 
