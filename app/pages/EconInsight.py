@@ -1,6 +1,8 @@
 from utils.common_imports import *
 import plotly.express as px
 import plotly.graph_objects as go
+import streamlit.components.v1 as components
+import statsmodels.api as sm
 
 IN_QUESTION1 = ROOT/"data"/"output"/"question1" # ROOT has already app in it
 
@@ -55,7 +57,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-st.title("Question 1: Global Digital Trade")
+st.title("🌍 Question 1: Global Digital Trade")
 st.subheader("Which countries lead in digital service exports?")
 
 
@@ -333,3 +335,132 @@ fig_race.update_layout(
 fig_race.update_traces(texttemplate=None) # Hide text on bars if it's cluttered
 
 st.plotly_chart(fig_race, use_container_width=True)
+
+st.title("⚙️ Question 2: Technology Adoption & Trade")
+
+st.write("---")
+
+
+st.header("Is there a relationship between internet adoption and digital service exports? ")
+
+st.subheader("Baseline OLS Model Results")
+st.subheader("Econometric Analysis: The Impact of Digital Adoption")
+st.markdown("Here we explore the relationship between a country's digital adoption and its success in exporting digital services, controlling for GDP and population.")
+
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.subheader("Interactive 3D Data Cloud")
+    
+    # Define the path to your saved HTML file
+    plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
+
+    # --- This try/except block is for the 3D PLOT ---
+    try:
+        with open(plot_path_3d, 'r', encoding='utf-8') as f:
+            html_string = f.read()
+        components.html(html_string, height=600, scrolling=False)
+    except FileNotFoundError:
+        st.warning(f"3D plot file not found at {plot_path_3d}. Please run the analysis notebook to generate it.")
+
+    plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
+
+with col2:
+    st.subheader("Baseline OLS Model Results")
+
+    try:
+        # --- Re-run the model to get the results object ---
+        df = pd.read_csv(IN_QUESTION1/"final_panel_for_regression.csv")
+        Y = np.log(df['Exports_Digital_Service'] + 1)
+        X = df[['internet_usage_pct', 'gdp_per_capita', 'population']]
+        X['log_gdp_per_capita'] = np.log(X['gdp_per_capita'] + 1)
+        X['log_population'] = np.log(X['population'] + 1)
+        X = X[['internet_usage_pct', 'log_gdp_per_capita', 'log_population']]
+        X = sm.add_constant(X)
+        model_ols = sm.OLS(Y, X)
+        results_ols = model_ols.fit()
+        
+        # --- Create a Clean DataFrame from the Results ---
+        results_df = pd.DataFrame({
+            "Variable": results_ols.params.index,
+            "Coefficient": results_ols.params.values,
+            "Std. Error": results_ols.bse.values,
+            "P-value": results_ols.pvalues.values
+        })
+        
+        def get_stars(p_value):
+            if p_value < 0.001: return '***'
+            elif p_value < 0.01: return '**'
+            elif p_value < 0.05: return '*'
+            else: return ''
+        
+        results_df['Significance'] = results_df['P-value'].apply(get_stars)
+
+        # --- Display the Clean Table ---
+        st.markdown("##### Key Variable Effects")
+        display_df = results_df[['Variable', 'Coefficient', 'Std. Error', 'Significance']].copy()
+        display_df = display_df[display_df['Variable'] != 'const']
+        
+        st.dataframe(
+            display_df.style.format({
+                'Coefficient': '{:.4f}',
+                'Std. Error': '{:.4f}',
+            }),
+            use_container_width=True,
+            hide_index=True
+        )
+        st.caption("Significance levels: *** p<0.001, ** p<0.01, * p<0.05")
+
+        st.write("---")
+
+        # --- Display R-squared and Observations ---
+        col_a, col_b = st.columns(2)
+        col_a.metric("R-squared", f"{results_ols.rsquared:.3f}")
+        col_b.metric("Observations", f"{int(results_ols.nobs)}")
+
+        # --- CORRECTED Expander for Interpretation ---
+        with st.expander("How to Interpret These Results"):
+            st.markdown("""
+            ##### 1. The Model Equation:
+            ```
+            log(Digital Exports) = β₀ + β₁*(Internet Usage %) + β₂*log(GDP) + β₃*log(Population)
+            ```
+            This model helps us understand how different factors relate to a country's digital exports.
+
+            ---
+            ##### 2. Interpreting the Coefficients:
+            *   **`internet_usage_pct` (β₁):** The coefficient is **0.0109**. This means that for each **1 percentage point increase** in a country's internet usage, we expect to see a **1.09% increase** in its digital service exports, holding other factors constant.
+
+            *   **`log_gdp_per_capita` (β₂):** The coefficient is **1.4666**. This is an *elasticity*. For each **1% increase** in GDP per capita, we expect a **1.47% increase** in digital exports.
+
+            *   **`log_population` (β₃):** The coefficient is **1.1576**. This is also an *elasticity*. For each **1% increase** in population, we expect a **1.16% increase** in digital exports.
+
+            ---
+            ##### 3. Key Statistics:
+            *   **Significance (***):** The stars confirm that all our results are highly statistically significant and not due to random chance.
+            *   **R-squared:** Our model explains **63.1%** of the variation in digital service exports.
+            """)
+
+        # --- CORRECTED Expander for the Full Raw Output ---
+        with st.expander("View Full OLS Summary Table"):
+            st.code(str(results_ols.summary()), language='text')
+
+    except FileNotFoundError:
+        st.error("The regression data file ('final_panel_for_regression.csv') was not found.")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+
+
+
+
+
+
+
+
+
+
+st.write("---")
+
+st.header("Do countries with higher technology adoption export more digital services?")
+
+st.write("---")
