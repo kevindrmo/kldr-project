@@ -458,9 +458,119 @@ with tab2:
             st.error("The regression data file ('final_panel_for_regression.csv') was not found.")
         except Exception as e:
             st.error(f"An error occurred: {e}")
+    # In your EconInsight.py, inside the tab for Question 2
+
+# ... (after the code for the simple OLS results) ...
+# In your EconInsight.py, inside the tab for Question 2
+
+# ... (after the code for the simple OLS results) ...
+
+# In your EconInsight.py, inside the tab for Question 2
+
+# ... (after the code for the simple OLS results) ...
+
+# In your EconInsight.py, inside the tab for Question 2
+
+# ... (after the code for the simple OLS results) ...
+
+    st.write("---")
+
+    # --- 1. THE INTERACTIVE "DEBUNKING" SECTION ---
+    st.subheader("Debunking the Simple Model: An Interactive Look")
+    st.caption("Our first model was a good start, but it has hidden flaws. Let's uncover them.")
+
+    # Create the interactive layout
+    col1, col2 = st.columns([1, 1.5])
+
+    # The Demonstration Area (Right Column)
+    with col2:
+        # Initialize session state
+        if 'active_effect' not in st.session_state:
+            st.session_state.active_effect = 'none'
+
+        # Display content based on the active effect
+        if st.session_state.active_effect == 'country':
+            st.info("##### The 'Country Effect' (e.g., DE vs. IN)")
+            st.markdown("""
+            Imagine Germany and India. Germany has a long history of industrial exports and robust infrastructure. India has a booming software and service industry.
+
+            These unique, deep-seated characteristics (culture, policy, infrastructure) are **constant** for each country over the years.
+
+            A simple OLS model lumps these powerful effects in with everything else, potentially distorting the true impact of variables like internet usage. It can't tell if high exports are due to internet adoption or just because it's 'Germany'.
+            """)
+
+        elif st.session_state.active_effect == 'time':
+            st.warning("##### The 'Time Effect' (e.g., 2008 vs. 2020)")
+            st.markdown("""
+            Think about the years 2008 and 2020.
+
+            *   **2008:** The Global Financial Crisis hit, depressing trade worldwide.
+            *   **2020:** The COVID-19 pandemic caused a massive, unprecedented surge in demand for remote work and digital services.
+
+            These are global shocks that affect *all* countries at the same time. A simple OLS model might see a jump in exports in 2020 and wrongly give all the credit to a small rise in GDP, ignoring the giant global event.
+            """)
+
+        else: # The default state
+            st.write("#### Click a button to the left to reveal a hidden flaw in the simple model.")
+            st.markdown(
+                """
+                <div style="
+                    border: 2px dashed #444;
+                    border-radius: 10px;
+                    height: 250px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    color: #666;
+                    font-family: sans-serif;
+                    padding: 20px;
+                ">
+                    The evidence will appear here...
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+    # The Control Panel (Left Column)
+    with col1:
+        st.markdown("#### The Problem:")
+        st.markdown("A simple regression assumes all data points are independent. But our data has two hidden patterns:")
+
+        # --- THE FIX IS HERE ---
+        # Buttons now correctly assign the session state
+        if st.button("1. Unseen Country Differences", use_container_width=True):
+            st.session_state.active_effect = 'country' # <-- CORRECTED
+
+        if st.button("2. Unseen Global Shocks", use_container_width=True):
+            st.session_state.active_effect = 'time' # <-- CORRECTED
+
+        st.markdown("---")
+        st.success("**The Solution:** To fix this, we must use **Panel Data Analysis**, a method that controls for these hidden effects.")
 
 
+    # --- 2. THE DETAILED SCIENTIFIC EXPLANATION ---
+    with st.expander("Read the detailed econometric explanation"):
+        # ... (The text for the expander remains the same as it was correct) ...
+        st.markdown("""
+        While our initial OLS model gives us valuable clues, it operates on a major simplifying assumption: it treats each data point (a country in a specific year) as an independent event. This is like assuming that Germany in 2015 has no relationship to Germany in 2016, or that France and Germany are completely dissimilar.
 
+        This assumption is flawed for two main reasons:
+
+        **1. Unobserved Country-Specific Effects:**
+        *   Every country is unique. Factors like culture, political systems, historical trade relationships, and geography are deeply embedded and don't change much year to year.
+        *   These "hidden" characteristics can influence both digital exports and our predictor variables (like GDP or internet usage).
+        *   Simple OLS can't distinguish the effect of our variables from these hidden country-specific traits, leading to a risk of **omitted variable bias** and potentially misleading conclusions.
+
+        **2. Unobserved Time-Specific Effects:**
+        *   The world changes. Global events like a financial crisis, a pandemic, or a major technological breakthrough affect *all* countries in a given year.
+        *   These global shocks can influence digital trade across the board.
+        *   Simple OLS might incorrectly attribute the impact of these global trends to our specific variables.
+
+        > **In short, our current model is likely missing a crucial part of the story.** It cannot properly account for the unique, unchangeable characteristics of each country or the global shocks that affect all countries over time.
+
+        To build a more robust and trustworthy model, we must use a technique designed for this exact type of data: **Panel Data Analysis**. This method allows us to control for both country-specific and time-specific effects, giving us a much clearer and more accurate picture of the true relationships.
+        """)
 
 
 
