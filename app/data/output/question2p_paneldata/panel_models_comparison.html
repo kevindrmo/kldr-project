@@ -1,0 +1,29 @@
+<pre>                                              Model Comparison                                             
+===========================================================================================================
+                                         Pooled OLS                  Country FE                  Two-way FE
+-----------------------------------------------------------------------------------------------------------
+Dep. Variable               Exports_Digital_Service     Exports_Digital_Service     Exports_Digital_Service
+Estimator                                  PanelOLS                    PanelOLS                    PanelOLS
+No. Observations                               2367                        2367                        2367
+Cov. Est.                                Unadjusted                  Unadjusted                  Unadjusted
+R-squared                                    0.6306                      0.0236                      0.0061
+R-Squared (Within)                          -0.0006                      0.0236                     -0.0104
+R-Squared (Between)                          0.6756                     -0.1336                     -1.3808
+R-Squared (Overall)                          0.6306                     -0.1351                     -1.3840
+F-statistic                                  1344.7                      17.507                      4.4337
+P-value (F-stat)                             0.0000                      0.0000                      0.0041
+=====================     =========================   =========================   =========================
+const                                        2.4023                                                        
+                                           (3.8464)                                                        
+internet_usage_pct                           0.0109                      0.0099                     -0.0003
+                                           (3.5899)                    (4.1330)                   (-0.0991)
+log_gdp_per_capita                           1.4666                      0.6964                      0.3598
+                                           (22.439)                    (2.9469)                    (1.4140)
+log_population                               1.1576                     -0.5610                     -1.3771
+                                           (48.993)                   (-1.2999)                   (-2.8337)
+======================= =========================== =========================== ===========================
+Effects                                                                  Entity                      Entity
+                                                                                                       Time
+-----------------------------------------------------------------------------------------------------------
+
+T-stats reported in parentheses</pre>

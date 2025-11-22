@@ -1,0 +1,5 @@
+Variable,Coefficient,P-Value,Model
+internet_usage_pct,-0.0003349421123350694,0.9210584702490867,Two-way FE
+log_gdp_per_capita,0.3598397601438763,0.15749906206715547,Two-way FE
+log_population,-1.377053578796223,0.004644133077990498,Two-way FE
+R-Squared,-0.010369312124804075,0.0,Two-way FE

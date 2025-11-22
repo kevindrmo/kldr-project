@@ -581,5 +581,199 @@ with tab2:
     st.write("---")
 
     st.header("Do countries with higher technology adoption export more digital services?")
+    # In your EconInsight.py file, inside the "Q2" tab
+
+    # ... (after the interactive section and the detailed expander) ...
 
     st.write("---")
+    st.subheader("The Solution: Comparing Panel Data Models")
+    st.markdown("""
+    Here we present the results from three models. We start with a simple Pooled OLS and progressively add controls to arrive at our most reliable estimate, the **Two-way Fixed Effects (FE)** model.
+
+    Notice how the coefficients and their significance (the numbers in parentheses are t-statistics) change dramatically.
+    """)
+
+# In EconInsight.py, after the "Detailed Interpretation" expander
+
+    # --- FINAL EXPANDER: Full Raw Regression Output ---
+    with st.expander("View Full Regression Output Table"):
+        try:
+            # Define the path to the .txt file
+            panel_txt_path = ROOT/ "data" / "output" / "question2p_paneldata" / "panel_models_comparison.txt"
+            
+            # Open and read the text file
+            with open(panel_txt_path, "r") as f:
+                full_results_text = f.read()
+            
+            # --- THIS IS THE FIX  ---> We fix it with st.code !! 
+            # Use st.code() to guarantee a monospace font and preserve alignment.
+            st.code(full_results_text, language='text')
+
+        except FileNotFoundError:
+            st.warning("The full regression output file (`panel_models_comparison.txt`) was not found. Please re-run the final cell of the analysis notebook.")
+
+
+    # --- Add the final interpretation ---
+    st.markdown("""
+    #### Interpretation of the Two-way Fixed Effects Model:
+
+    This is our most robust model, controlling for both country-specific attributes and global, year-specific shocks. The results are striking:
+
+    1.  **`internet_usage_pct` & `log_gdp_per_capita`:** Both variables are now **statistically insignificant**. This suggests that once we account for the deep-seated characteristics of a country and global trends, the isolated, year-to-year changes in internet use or GDP per capita don't have a strong, independent effect on digital exports in this model. The effect we saw in the simple OLS was likely due to omitted variables.
+
+    2.  **`log_population`:** The effect is now **negative and significant**. This is a fascinating result that warrants further investigation. It could imply that, all else being equal, larger countries have a harder time translating their size into per-capita digital export dominance, but this is just one possible interpretation.
+
+    This analysis shows the immense value of Fixed Effects. It prevents us from drawing simple, and likely wrong, conclusions, pushing us toward a more nuanced and accurate understanding of the data.
+    """)
+
+
+
+
+
+    st.write("---")
+    st.subheader("The Coefficient Journey: From Simple to Sophisticated")
+    # ... (caption and data loading code is correct) ...
+
+    DATA_PATH = ROOT/ "data" / "output" / "question2p_paneldata"
+    plot_df = pd.read_csv(DATA_PATH / "panel_plot_data.csv")
+    model_order = ["Standard OLS", "Country FE", "Two-way FE"]
+    plot_df['Model_Stage'] = pd.Categorical(plot_df['Model'], categories=model_order, ordered=True)
+
+    fig = px.line(
+        plot_df,
+        x="Model_Stage",
+        y="Coefficient",
+        color="Variable",
+        markers=True,
+        labels={
+            "Model_Stage": "Model Specification",
+            "Coefficient": "Estimated Coefficient (Effect Size)",
+            "Variable": "Explanatory Variable"
+        },
+        title="<b>The Journey of Coefficients Across Model Specifications</b>"
+    )
+
+    # --- Add the Confidence Interval Bands ---
+    for i, var in enumerate(plot_df['Variable'].unique()):
+        var_df = plot_df[plot_df['Variable'] == var].sort_values('Model_Stage')
+        line_color = fig.data[i].line.color # This gives a hex color like '#636EFA'
+        
+        # --- THIS IS THE DEFINITIVE FIX ---
+        # Manually convert the hex color string to an rgba string for the fill color.
+        # This removes the need for any special conversion functions.
+        hex_color = line_color.lstrip('#')
+        rgb_tuple = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+        fill_color = f'rgba({rgb_tuple[0]}, {rgb_tuple[1]}, {rgb_tuple[2]}, 0.2)'
+
+
+        fig.add_traces(go.Scatter(
+            x=var_df['Model_Stage'],
+            y=var_df['Conf. Upper'],
+            fill=None,
+            mode='lines',
+            line=dict(width=0),
+            showlegend=False
+        ))
+        fig.add_traces(go.Scatter(
+            x=var_df['Model_Stage'],
+            y=var_df['Conf. Lower'],
+            fill='tonexty',
+            mode='lines',
+            line=dict(width=0),
+            fillcolor=fill_color,
+            showlegend=False
+        ))
+
+    # --- Final Touches (This part is correct) ---
+    fig.add_hline(y=0, line_width=2, line_dash="dash", line_color="grey")
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        legend_title_text=None,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+
+    # Display the plot in your app
+    st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+    st.write("---")
+    st.subheader("The Coefficient Explorer")
+    st.caption("Select a variable to see how its estimated effect changes as we improve our model.")
+
+    # --- Helper function ---
+    def get_significance_icon(p_value):
+        return "✅" if p_value < 0.05 else "❌"
+
+    # --- Define paths and load data ---
+    PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+    DATA_PATH = PROJECT_ROOT / "app" / "data" / "output" / "question2p_paneldata"
+
+    df_ols = pd.read_csv(DATA_PATH / "summary_standard_ols.csv")
+    df_fe = pd.read_csv(DATA_PATH / "summary_country_fe.csv")
+    df_twfe = pd.read_csv(DATA_PATH / "summary_twfe.csv")
+
+    # --- The Interactive Selectbox ---
+    variable_to_explore = st.selectbox(
+        "**Explore a variable:**",
+        ['internet_usage_pct', 'log_gdp_per_capita', 'log_population'],
+        index=0
+    )
+    st.write("")
+
+    # --- Create the three-column layout ---
+    col1, col2, col3 = st.columns(3, gap="large")
+
+    # --- A function to display a model's results for the chosen variable ---
+    # --- THE FIX IS HERE: The entire block below is now correctly indented ---
+    def display_variable_in_model(column, model_name, model_df):
+        with column:
+            st.markdown(f"<h5>{model_name}</h5>", unsafe_allow_html=True)
+
+            # Extract the specific variable's data
+            var_row = model_df[model_df['Variable'] == variable_to_explore].iloc[0]
+            coeff = var_row['Coefficient']
+            pval = var_row['P-Value']
+
+            # Display the main coefficient
+            st.metric(
+                label=f"Coefficient for {variable_to_explore}",
+                value=f"{coeff:.4f}",
+                help="This is the estimated effect of the variable in this model."
+            )
+
+            # Display the significance
+            st.markdown(f"**Significant?** {get_significance_icon(pval)} (p-value: {pval:.3f})")
+
+            st.markdown("---")
+
+            # Find and display the model's R-squared
+            r_squared_row = model_df[model_df['Variable'].str.contains("R-Squared", na=False)]
+            if not r_squared_row.empty:
+                r_squared_label = r_squared_row['Variable'].iloc[0]
+                r_squared_val = r_squared_row['Coefficient'].iloc[0]
+                st.markdown(f"**{r_squared_label}:** `{r_squared_val:.3f}`")
+            else:
+                st.markdown("**R-Squared:** `Not Found`")
+
+    # --- Populate each column ---
+    display_variable_in_model(col1, "Standard OLS", df_ols)
+    display_variable_in_model(col2, "Country FE", df_fe)
+    display_variable_in_model(col3, "Two-way FE", df_twfe)
+
+
+    # --- The Detailed Interpretation Expander ---
+    with st.expander("See the Detailed Interpretation"):
+        st.markdown("""
+        #### How to Read This Dashboard:
+        By selecting a variable from the dropdown, you can track its journey across the three models. This tells a story about the importance of controlling for hidden variables.
+
+        *   **Standard OLS:** This is our naive starting point. It looks at the raw correlation and often shows strong effects for all variables.
+        *   **Country FE (Fixed Effects):** Here, we control for each country's unique, unchanging characteristics. Notice how the effect of some variables shrinks or becomes insignificant.
+        *   **Two-way FE (Our Best Model):** Finally, we *also* control for global shocks that affect all countries in a given year. For many variables, the effect becomes insignificant (marked with ❌).
+
+        ---
+        **Conclusion:** The initial correlations we saw in the Standard OLS model were likely misleading. After applying robust panel data methods, we find that the story is much more complex. This demonstrates the critical importance of choosing the right econometric model.
+        """)

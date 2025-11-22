@@ -1,0 +1,5 @@
+Variable,Coefficient,P-Value,Model
+internet_usage_pct,0.00992658605735155,3.71675993551257e-05,Country FE
+log_gdp_per_capita,0.6963626364062516,0.003243616689598827,Country FE
+log_population,-0.5610283113717202,0.19377939847491543,Country FE
+R-Squared,0.023598862077992,0.0,Country FE

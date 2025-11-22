@@ -1,0 +1,6 @@
+Variable,Coefficient,P-Value,Model
+const,2.402317239707153,0.0001230377095806645,Standard OLS
+internet_usage_pct,0.01088876597300609,0.0003375861076819753,Standard OLS
+log_gdp_per_capita,1.4665916155482261,0.0,Standard OLS
+log_population,1.1575557696255367,0.0,Standard OLS
+R-Squared,-0.0005507311902979151,0.0,Standard OLS
