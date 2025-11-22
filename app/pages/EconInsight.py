@@ -56,7 +56,7 @@ st.markdown("""
 
 
 st.title("Question 1: Global Digital Trade")
-st.subheader("Which countries lead in digital service exports? How has digital trade evolved over the past decade?")
+st.subheader("Which countries lead in digital service exports?")
 
 
 st.subheader("Digital Export and Import Visualitzion")
@@ -215,3 +215,74 @@ with rank_col:
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+
+
+st.write("---")
+st.subheader("How has digital trade evolved over the past decade?")
+
+
+st.write("---")
+st.header("Evolution of Digital Trade Over Time")
+st.subheader("Select countries to compare their trade evolution from 2010-2023.")
+
+# --- Step 1: Create a multiselect widget for countries ---
+# Get a sorted list of unique country names for the dropdown
+all_countries = sorted(df_final_country_data['country_name'].unique())
+
+# Set some interesting default countries to show on first load
+default_countries = ['United States', 'United Kingdom', 'China', 'India', 'Germany']
+
+selected_countries = st.multiselect(
+    "Select countries to compare:",
+    options=all_countries,
+    default=default_countries
+)
+
+# --- Step 2: Filter the data for the selected countries and indicator ---
+if selected_countries: # Only proceed if the user has selected at least one country
+    evolution_df = df_final_country_data[
+        (df_final_country_data['country_name'].isin(selected_countries)) &
+        (df_final_country_data['indicator_name'] == indicator_choice) # Reuse the indicator choice from above!
+    ]
+
+    # --- Step 3: Create the line chart ---
+    fig_line = px.line(
+        evolution_df,
+        x='year',
+        y='value_true',
+        color='country_name', # Creates a different line for each country
+        title=f"Evolution of {indicator_choice.replace('_', ' ')}",
+        labels={
+            "year": "Year",
+            "value_true": "Trade Value (USD)",
+            "country_name": "Country"
+        },
+        markers=True # Adds dots on each data point for clarity
+    )
+
+    fig_line.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font_color='white',
+        legend_title_text=''
+    )
+    
+    # Use the smart "Billion/Million" format for the hover text
+    # This is the corrected code
+    fig_line.update_traces(
+        customdata=evolution_df[['value_formatted_display']],
+        hovertemplate="""<b>%{data.name}</b>  
+    
+
+                        Year: %{x}  
+
+                        Value: %{customdata[0]}
+                        <extra></extra>"""
+    )
+
+
+    st.plotly_chart(fig_line, use_container_width=True)
+else:
+    st.warning("Please select at least one country to visualize its evolution.")
+
+
