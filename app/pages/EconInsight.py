@@ -56,399 +56,408 @@ st.markdown("""
     <p class="econinsight-tagline">AI-Powered Data Understanding</p>
 """, unsafe_allow_html=True)
 
+tab1, tab2 = st.tabs([
+    "Q1: Global Leaders Analysis", 
+    "Q2: Adoption vs. Exports Analysis", 
+])
 
-st.title("🌍 Question 1: Global Digital Trade")
-st.subheader("Which countries lead in digital service exports?")
-
-
-st.subheader("Digital Export and Import Visualitzion")
-
-
-df_exports_imports = pd.read_csv(IN_QUESTION1/ "df_exports_imports.csv")
-df_final_country_data = pd.read_csv(IN_QUESTION1/ "final_country_data.csv")
+with tab1:
+    st.title("🌍 Question 1: Global Digital Trade")
+    st.subheader("Which countries lead in digital service exports?")
 
 
-st.write("---")
+    st.subheader("Digital Export and Import Visualitzion")
 
-st.header("Dashboard Controls")
 
-control_col1, control_col2, control_col3 = st.columns([1, 2, 3])
+    df_exports_imports = pd.read_csv(IN_QUESTION1/ "df_exports_imports.csv")
+    df_final_country_data = pd.read_csv(IN_QUESTION1/ "final_country_data.csv")
 
-with control_col1:
-    indicator_choice = st.selectbox(
-    "Select an Indicator to Display:",
-    df_final_country_data["indicator_name"].unique()
-)
 
-with control_col2:
-    year_choice = st.slider(
-        "Select Year:",
-        min_value= int(df_final_country_data["year"].min()),
-        max_value= int(df_final_country_data["year"].max()),
-        value= int(df_final_country_data["year"].min()) # default value
+    st.write("---")
+
+    st.header("Dashboard Controls")
+
+    control_col1, control_col2, control_col3 = st.columns([1, 2, 3])
+
+    with control_col1:
+        indicator_choice = st.selectbox(
+        "Select an Indicator to Display:",
+        df_final_country_data["indicator_name"].unique()
     )
 
-with control_col3:
-    top_n_choice = st.slider("Select the number of Top N countries to display:",
-                                min_value= 5,
-                                max_value = 50, 
-                                value =10, # default value
-                                step = 5)
+    with control_col2:
+        year_choice = st.slider(
+            "Select Year:",
+            min_value= int(df_final_country_data["year"].min()),
+            max_value= int(df_final_country_data["year"].max()),
+            value= int(df_final_country_data["year"].min()) # default value
+        )
 
-# Filter Dataframe to user's choice
+    with control_col3:
+        top_n_choice = st.slider("Select the number of Top N countries to display:",
+                                    min_value= 5,
+                                    max_value = 50, 
+                                    value =10, # default value
+                                    step = 5)
 
-#df_fitlered = df_exports_imports[df_exports_imports["indicator_name"] == indicator_choice].copy()
+    # Filter Dataframe to user's choice
 
-#df_top_n = df_fitlered.sort_values("value", ascending = False).groupby("year").head(top_n_choice)
+    #df_fitlered = df_exports_imports[df_exports_imports["indicator_name"] == indicator_choice].copy()
 
-df_filtered = df_final_country_data[
-    (df_final_country_data["indicator_name"] == indicator_choice) &
-    (df_final_country_data["year"] == year_choice)
-].copy()
+    #df_top_n = df_fitlered.sort_values("value", ascending = False).groupby("year").head(top_n_choice)
 
-df_top_n = df_filtered[df_filtered["rank"] <= top_n_choice]
-# --- COLOR SYNCHRONIZATION SETUP ---
-COLOR_SCALE = px.colors.sequential.Plasma
-cmin = df_top_n['value_true'].min()
-cmax = df_top_n['value_true'].max()
+    df_filtered = df_final_country_data[
+        (df_final_country_data["indicator_name"] == indicator_choice) &
+        (df_final_country_data["year"] == year_choice)
+    ].copy()
+
+    df_top_n = df_filtered[df_filtered["rank"] <= top_n_choice]
+    # --- COLOR SYNCHRONIZATION SETUP ---
+    COLOR_SCALE = px.colors.sequential.Plasma
+    cmin = df_top_n['value_true'].min()
+    cmax = df_top_n['value_true'].max()
 
 
-st.write("---")
+    st.write("---")
 
-map_col, rank_col = st.columns([3, 1.5])
+    map_col, rank_col = st.columns([3, 1.5])
 
-with map_col:
-    st.subheader(f"Top {top_n_choice} {indicator_choice.replace('_', ' ')} Countries in {year_choice}")
+    with map_col:
+        st.subheader(f"Top {top_n_choice} {indicator_choice.replace('_', ' ')} Countries in {year_choice}")
 
-    fig = go.Figure()
+        fig = go.Figure()
 
-    # Layer 1: Base map of all countries in a neutral gray
-    fig.add_trace(go.Choropleth(
-        locations=df_filtered['country_code'],
-        z=[0] * len(df_filtered),
-        colorscale=[[0, '#EAEAEA'], [1, '#EAEAEA']],
-        showscale=False,
-        hoverinfo='none'
-    ))
+        # Layer 1: Base map of all countries in a neutral gray
+        fig.add_trace(go.Choropleth(
+            locations=df_filtered['country_code'],
+            z=[0] * len(df_filtered),
+            colorscale=[[0, '#EAEAEA'], [1, '#EAEAEA']],
+            showscale=False,
+            hoverinfo='none'
+        ))
 
-    # Layer 2: Colored Top N countries
-    fig.add_trace(go.Choropleth(
-        locations=df_top_n['country_code'],
-        z=df_top_n['value_true'],
-        colorscale="Plasma",
-        colorbar_title='Value (USD)',
-        customdata=df_top_n[['rank', 'value_formatted']],
-        hovertext=df_top_n['country_name'],
-        # --- CORRECTED HOVERTEMPLATE ---
-        hovertemplate="""<b>%{hovertext}</b>  
-    
+        # Layer 2: Colored Top N countries
+        fig.add_trace(go.Choropleth(
+            locations=df_top_n['country_code'],
+            z=df_top_n['value_true'],
+            colorscale="Plasma",
+            colorbar_title='Value (USD)',
+            customdata=df_top_n[['rank', 'value_formatted']],
+            hovertext=df_top_n['country_name'],
+            # --- CORRECTED HOVERTEMPLATE ---
+            hovertemplate="""<b>%{hovertext}</b>  
+        
 
-                        Rank: %{customdata[0]}  
+                            Rank: %{customdata[0]}  
 
-                        Value: %{customdata[1]}
-                        <extra></extra>"""
-    ))
+                            Value: %{customdata[1]}
+                            <extra></extra>"""
+        ))
 
-    fig.update_layout(
-        height=600,
-        margin={"r":0, "t":40, "l":0, "b":0},
-        geo=dict(
-            showframe=False,
-            showcoastlines=False,
-            projection_type='natural earth'
-        ),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-    )
+        fig.update_layout(
+            height=600,
+            margin={"r":0, "t":40, "l":0, "b":0},
+            geo=dict(
+                showframe=False,
+                showcoastlines=False,
+                projection_type='natural earth'
+            ),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
 
-    st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True)
 
-with rank_col:
-    st.subheader(f"Ranking for {year_choice}")
+    with rank_col:
+        st.subheader(f"Ranking for {year_choice}")
 
-    # --- Prepare data and colors ---
-    ranking_df = df_top_n.sort_values('rank', ascending=True)
-    from plotly.colors import sample_colorscale
-    if cmax > cmin:
-        colors = sample_colorscale(COLOR_SCALE, [(n - cmin) / (cmax - cmin) for n in ranking_df['value_true']])
-    else:
-        colors = [px.colors.sequential.Plasma[0]] * len(ranking_df)
+        # --- Prepare data and colors ---
+        ranking_df = df_top_n.sort_values('rank', ascending=True)
+        from plotly.colors import sample_colorscale
+        if cmax > cmin:
+            colors = sample_colorscale(COLOR_SCALE, [(n - cmin) / (cmax - cmin) for n in ranking_df['value_true']])
+        else:
+            colors = [px.colors.sequential.Plasma[0]] * len(ranking_df)
 
-    # --- NEW: Multi-column logic ---
-    wrap_at = 25
-    if len(ranking_df) > wrap_at:
-        rank_col1, rank_col2 = st.columns(2)
-        dfs_to_render = [ranking_df.iloc[:wrap_at], ranking_df.iloc[wrap_at:]]
-        cols_to_render_in = [rank_col1, rank_col2]
-    else:
-        dfs_to_render = [ranking_df]
-        cols_to_render_in = [rank_col]
+        # --- NEW: Multi-column logic ---
+        wrap_at = 25
+        if len(ranking_df) > wrap_at:
+            rank_col1, rank_col2 = st.columns(2)
+            dfs_to_render = [ranking_df.iloc[:wrap_at], ranking_df.iloc[wrap_at:]]
+            cols_to_render_in = [rank_col1, rank_col2]
+        else:
+            dfs_to_render = [ranking_df]
+            cols_to_render_in = [rank_col]
 
-    # --- Loop through the columns and render the data ---
-    for i, col in enumerate(cols_to_render_in):
-        with col:
-            df_slice = dfs_to_render[i]
-            
-            # Add the connecting "subway line" for this column
-            col.markdown("""
-            <style> .metro-line { position: absolute; left: 33px; top: 0; bottom: 0; width: 4px; background-color: #444; z-index: -1; } </style>
-            <div class="metro-line"></div>
-            """, unsafe_allow_html=True)
-
-            for j, row in enumerate(df_slice.itertuples()):
-                rank = int(row.rank)
-                country_name = row.country_name
-                value_display = row.value_formatted_display
+        # --- Loop through the columns and render the data ---
+        for i, col in enumerate(cols_to_render_in):
+            with col:
+                df_slice = dfs_to_render[i]
                 
-                # Find the original index to get the correct color
-                original_index = ranking_df.index.get_loc(row.Index)
-                bar_color = colors[original_index]
-
-                # --- FINAL FIX: Use a single HTML table for robust layout ---
-                st.markdown(f"""
-                <div style="display: flex; align-items: center; margin-bottom: 8px;">
-                    <!-- Rank Circle -->
-                    <div style="width: 35px; height: 35px; border-radius: 50%; background-color: {bar_color}; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; text-shadow: 1px 1px 2px #333; border: 2px solid white; flex-shrink: 0;">
-                        {rank}
-                    </div>
-                    <!-- Country and Value Text -->
-                    <div style="margin-left: 10px; flex-grow: 1;">
-                        <div style="font-weight: bold; color: #ECEFF4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{country_name}</div>
-                        <div style="font-size: 12px; color: #88C0D0;">{value_display}</div>
-                    </div>
-                </div>
+                # Add the connecting "subway line" for this column
+                col.markdown("""
+                <style> .metro-line { position: absolute; left: 33px; top: 0; bottom: 0; width: 4px; background-color: #444; z-index: -1; } </style>
+                <div class="metro-line"></div>
                 """, unsafe_allow_html=True)
 
+                for j, row in enumerate(df_slice.itertuples()):
+                    rank = int(row.rank)
+                    country_name = row.country_name
+                    value_display = row.value_formatted_display
+                    
+                    # Find the original index to get the correct color
+                    original_index = ranking_df.index.get_loc(row.Index)
+                    bar_color = colors[original_index]
 
-st.write("---")
-st.subheader("How has digital trade evolved over the past decade?")
+                    # --- FINAL FIX: Use a single HTML table for robust layout ---
+                    st.markdown(f"""
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <!-- Rank Circle -->
+                        <div style="width: 35px; height: 35px; border-radius: 50%; background-color: {bar_color}; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; text-shadow: 1px 1px 2px #333; border: 2px solid white; flex-shrink: 0;">
+                            {rank}
+                        </div>
+                        <!-- Country and Value Text -->
+                        <div style="margin-left: 10px; flex-grow: 1;">
+                            <div style="font-weight: bold; color: #ECEFF4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{country_name}</div>
+                            <div style="font-size: 12px; color: #88C0D0;">{value_display}</div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
 
-st.write("---")
-st.header("Evolution of Digital Trade Over Time")
-st.subheader("Select countries to compare their trade evolution from 2010-2023.")
+    st.write("---")
+    st.subheader("How has digital trade evolved over the past decade?")
 
-# --- Step 1: Create a multiselect widget for countries ---
-# Get a sorted list of unique country names for the dropdown
-all_countries = sorted(df_final_country_data['country_name'].unique())
 
-# Set some interesting default countries to show on first load
-default_countries = ['United States', 'United Kingdom', 'China', 'India', 'Germany']
+    st.write("---")
+    st.header("Evolution of Digital Trade Over Time")
+    st.subheader("Select countries to compare their trade evolution from 2010-2023.")
 
-selected_countries = st.multiselect(
-    "Select countries to compare:",
-    options=all_countries,
-    default=default_countries
-)
+    # --- Step 1: Create a multiselect widget for countries ---
+    # Get a sorted list of unique country names for the dropdown
+    all_countries = sorted(df_final_country_data['country_name'].unique())
 
-# --- Step 2: Filter the data for the selected countries and indicator ---
-if selected_countries: # Only proceed if the user has selected at least one country
-    evolution_df = df_final_country_data[
-        (df_final_country_data['country_name'].isin(selected_countries)) &
-        (df_final_country_data['indicator_name'] == indicator_choice) # Reuse the indicator choice from above!
-    ]
+    # Set some interesting default countries to show on first load
+    default_countries = ['United States', 'United Kingdom', 'China', 'India', 'Germany']
 
-    # --- Step 3: Create the line chart ---
-    fig_line = px.line(
-        evolution_df,
-        x='year',
-        y='value_true',
-        color='country_name', # Creates a different line for each country
-        title=f"Evolution of {indicator_choice.replace('_', ' ')}",
-        labels={
-            "year": "Year",
-            "value_true": "Trade Value (USD)",
-            "country_name": "Country"
-        },
-        markers=True # Adds dots on each data point for clarity
+    selected_countries = st.multiselect(
+        "Select countries to compare:",
+        options=all_countries,
+        default=default_countries
     )
 
-    fig_line.update_layout(
+    # --- Step 2: Filter the data for the selected countries and indicator ---
+    if selected_countries: # Only proceed if the user has selected at least one country
+        evolution_df = df_final_country_data[
+            (df_final_country_data['country_name'].isin(selected_countries)) &
+            (df_final_country_data['indicator_name'] == indicator_choice) # Reuse the indicator choice from above!
+        ]
+
+        # --- Step 3: Create the line chart ---
+        fig_line = px.line(
+            evolution_df,
+            x='year',
+            y='value_true',
+            color='country_name', # Creates a different line for each country
+            title=f"Evolution of {indicator_choice.replace('_', ' ')}",
+            labels={
+                "year": "Year",
+                "value_true": "Trade Value (USD)",
+                "country_name": "Country"
+            },
+            markers=True # Adds dots on each data point for clarity
+        )
+
+        fig_line.update_layout(
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            font_color='white',
+            legend_title_text=''
+        )
+        
+        # Use the smart "Billion/Million" format for the hover text
+        # This is the corrected code
+        fig_line.update_traces(
+            customdata=evolution_df[['value_formatted_display']],
+            hovertemplate="""<b>%{data.name}</b>  
+        
+
+                            Year: %{x}  
+
+                            Value: %{customdata[0]}
+                            <extra></extra>"""
+        )
+
+
+        st.plotly_chart(fig_line, use_container_width=True)
+    else:
+        st.warning("Please select at least one country to visualize its evolution.")
+
+
+    st.header("Bar Chart Race: The Shifting Top 10")
+
+    # We can reuse the df_filtered from the top of your script, but this time for all years
+    race_df = df_final_country_data[
+        (df_final_country_data['indicator_name'] == indicator_choice) &
+        (df_final_country_data['rank'] <= 10) # Only show the Top 10
+    ]
+
+    fig_race = px.bar(
+        race_df,
+        x="value_true",
+        y="country_name",
+        orientation='h',
+        color="country_name",
+        animation_frame="year",
+        animation_group="country_name",
+        text="country_name",
+        title=f"Top 10 {indicator_choice.replace('_', ' ')} from 2010-2023",
+
+        labels= {
+            "value_true": "Trade Value (USD)",
+            "country_name" :"Country"
+            }
+    )
+    # --- ADD THIS SNIPPET TO CONTROL THE SPEED ---
+
+    # The duration is in milliseconds (ms). 
+    # 1000ms = 1 second.
+    # A good value is between 500ms and 1500ms per frame.
+    frame_duration = 1000  # Set the duration for each year's frame (e.g., 1 second)
+    transition_duration = 300 # The time it takes to animate between frames (e.g., 0.3 seconds)
+
+
+
+    # Improve layout and sort bars for each frame
+    fig_race.update_layout(
+        yaxis={'categoryorder':'total ascending'},
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         font_color='white',
-        legend_title_text=''
-    )
-    
-    # Use the smart "Billion/Million" format for the hover text
-    # This is the corrected code
-    fig_line.update_traces(
-        customdata=evolution_df[['value_formatted_display']],
-        hovertemplate="""<b>%{data.name}</b>  
-    
-
-                        Year: %{x}  
-
-                        Value: %{customdata[0]}
-                        <extra></extra>"""
+        showlegend=False
     )
 
 
-    st.plotly_chart(fig_line, use_container_width=True)
-else:
-    st.warning("Please select at least one country to visualize its evolution.")
+    fig_race.update_traces(texttemplate=None) # Hide text on bars if it's cluttered
 
-
-st.header("Bar Chart Race: The Shifting Top 10")
-
-# We can reuse the df_filtered from the top of your script, but this time for all years
-race_df = df_final_country_data[
-    (df_final_country_data['indicator_name'] == indicator_choice) &
-    (df_final_country_data['rank'] <= 10) # Only show the Top 10
-]
-
-fig_race = px.bar(
-    race_df,
-    x="value_true",
-    y="country_name",
-    orientation='h',
-    color="country_name",
-    animation_frame="year",
-    animation_group="country_name",
-    text="country_name",
-    title=f"Top 10 {indicator_choice.replace('_', ' ')} from 2010-2023",
-
-    labels= {
-        "value_true": "Trade Value (USD)",
-        "country_name" :"Country"
-        }
-)
-# --- ADD THIS SNIPPET TO CONTROL THE SPEED ---
-
-# The duration is in milliseconds (ms). 
-# 1000ms = 1 second.
-# A good value is between 500ms and 1500ms per frame.
-frame_duration = 1000  # Set the duration for each year's frame (e.g., 1 second)
-transition_duration = 300 # The time it takes to animate between frames (e.g., 0.3 seconds)
+    st.plotly_chart(fig_race, use_container_width=True)
 
 
 
-# Improve layout and sort bars for each frame
-fig_race.update_layout(
-    yaxis={'categoryorder':'total ascending'},
-    paper_bgcolor='rgba(0,0,0,0)',
-    plot_bgcolor='rgba(0,0,0,0)',
-    font_color='white',
-    showlegend=False
-)
+
+with tab2:
+    st.title("⚙️ Question 2: Technology Adoption & Trade")
+
+    st.write("---")
 
 
-fig_race.update_traces(texttemplate=None) # Hide text on bars if it's cluttered
+    st.header("Is there a relationship between internet adoption and digital service exports? ")
 
-st.plotly_chart(fig_race, use_container_width=True)
-
-st.title("⚙️ Question 2: Technology Adoption & Trade")
-
-st.write("---")
-
-
-st.header("Is there a relationship between internet adoption and digital service exports? ")
-
-st.subheader("Baseline OLS Model Results")
-st.subheader("Econometric Analysis: The Impact of Digital Adoption")
-st.markdown("Here we explore the relationship between a country's digital adoption and its success in exporting digital services, controlling for GDP and population.")
-
-col1, col2 = st.columns([1, 1])
-
-with col1:
-    st.subheader("Interactive 3D Data Cloud")
-    
-    # Define the path to your saved HTML file
-    plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
-
-    # --- This try/except block is for the 3D PLOT ---
-    try:
-        with open(plot_path_3d, 'r', encoding='utf-8') as f:
-            html_string = f.read()
-        components.html(html_string, height=600, scrolling=False)
-    except FileNotFoundError:
-        st.warning(f"3D plot file not found at {plot_path_3d}. Please run the analysis notebook to generate it.")
-
-    plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
-
-with col2:
     st.subheader("Baseline OLS Model Results")
+    st.subheader("Econometric Analysis: The Impact of Digital Adoption")
+    st.markdown("Here we explore the relationship between a country's digital adoption and its success in exporting digital services, controlling for GDP and population.")
 
-    try:
-        # --- Re-run the model to get the results object ---
-        df = pd.read_csv(IN_QUESTION1/"final_panel_for_regression.csv")
-        Y = np.log(df['Exports_Digital_Service'] + 1)
-        X = df[['internet_usage_pct', 'gdp_per_capita', 'population']]
-        X['log_gdp_per_capita'] = np.log(X['gdp_per_capita'] + 1)
-        X['log_population'] = np.log(X['population'] + 1)
-        X = X[['internet_usage_pct', 'log_gdp_per_capita', 'log_population']]
-        X = sm.add_constant(X)
-        model_ols = sm.OLS(Y, X)
-        results_ols = model_ols.fit()
+    col1, col2 = st.columns([1, 1])
+
+    with col1:
+        st.subheader("Interactive 3D Data Cloud")
         
-        # --- Create a Clean DataFrame from the Results ---
-        results_df = pd.DataFrame({
-            "Variable": results_ols.params.index,
-            "Coefficient": results_ols.params.values,
-            "Std. Error": results_ols.bse.values,
-            "P-value": results_ols.pvalues.values
-        })
-        
-        def get_stars(p_value):
-            if p_value < 0.001: return '***'
-            elif p_value < 0.01: return '**'
-            elif p_value < 0.05: return '*'
-            else: return ''
-        
-        results_df['Significance'] = results_df['P-value'].apply(get_stars)
+        # Define the path to your saved HTML file
+        plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
 
-        # --- Display the Clean Table ---
-        st.markdown("##### Key Variable Effects")
-        display_df = results_df[['Variable', 'Coefficient', 'Std. Error', 'Significance']].copy()
-        display_df = display_df[display_df['Variable'] != 'const']
-        
-        st.dataframe(
-            display_df.style.format({
-                'Coefficient': '{:.4f}',
-                'Std. Error': '{:.4f}',
-            }),
-            use_container_width=True,
-            hide_index=True
-        )
-        st.caption("Significance levels: *** p<0.001, ** p<0.01, * p<0.05")
+        # --- This try/except block is for the 3D PLOT ---
+        try:
+            with open(plot_path_3d, 'r', encoding='utf-8') as f:
+                html_string = f.read()
+            components.html(html_string, height=600, scrolling=False)
+        except FileNotFoundError:
+            st.warning(f"3D plot file not found at {plot_path_3d}. Please run the analysis notebook to generate it.")
 
-        st.write("---")
+        plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
 
-        # --- Display R-squared and Observations ---
-        col_a, col_b = st.columns(2)
-        col_a.metric("R-squared", f"{results_ols.rsquared:.3f}")
-        col_b.metric("Observations", f"{int(results_ols.nobs)}")
+    with col2:
+        st.subheader("Baseline OLS Model Results")
 
-        # --- CORRECTED Expander for Interpretation ---
-        with st.expander("How to Interpret These Results"):
-            st.markdown("""
-            ##### 1. The Model Equation:
-            ```
-            log(Digital Exports) = β₀ + β₁*(Internet Usage %) + β₂*log(GDP) + β₃*log(Population)
-            ```
-            This model helps us understand how different factors relate to a country's digital exports.
+        try:
+            # --- Re-run the model to get the results object ---
+            df = pd.read_csv(IN_QUESTION1/"final_panel_for_regression.csv")
+            Y = np.log(df['Exports_Digital_Service'] + 1)
+            X = df[['internet_usage_pct', 'gdp_per_capita', 'population']]
+            X['log_gdp_per_capita'] = np.log(X['gdp_per_capita'] + 1)
+            X['log_population'] = np.log(X['population'] + 1)
+            X = X[['internet_usage_pct', 'log_gdp_per_capita', 'log_population']]
+            X = sm.add_constant(X)
+            model_ols = sm.OLS(Y, X)
+            results_ols = model_ols.fit()
+            
+            # --- Create a Clean DataFrame from the Results ---
+            results_df = pd.DataFrame({
+                "Variable": results_ols.params.index,
+                "Coefficient": results_ols.params.values,
+                "Std. Error": results_ols.bse.values,
+                "P-value": results_ols.pvalues.values
+            })
+            
+            def get_stars(p_value):
+                if p_value < 0.001: return '***'
+                elif p_value < 0.01: return '**'
+                elif p_value < 0.05: return '*'
+                else: return ''
+            
+            results_df['Significance'] = results_df['P-value'].apply(get_stars)
 
-            ---
-            ##### 2. Interpreting the Coefficients:
-            *   **`internet_usage_pct` (β₁):** The coefficient is **0.0109**. This means that for each **1 percentage point increase** in a country's internet usage, we expect to see a **1.09% increase** in its digital service exports, holding other factors constant.
+            # --- Display the Clean Table ---
+            st.markdown("##### Key Variable Effects")
+            display_df = results_df[['Variable', 'Coefficient', 'Std. Error', 'Significance']].copy()
+            display_df = display_df[display_df['Variable'] != 'const']
+            
+            st.dataframe(
+                display_df.style.format({
+                    'Coefficient': '{:.4f}',
+                    'Std. Error': '{:.4f}',
+                }),
+                use_container_width=True,
+                hide_index=True
+            )
+            st.caption("Significance levels: *** p<0.001, ** p<0.01, * p<0.05")
 
-            *   **`log_gdp_per_capita` (β₂):** The coefficient is **1.4666**. This is an *elasticity*. For each **1% increase** in GDP per capita, we expect a **1.47% increase** in digital exports.
+            st.write("---")
 
-            *   **`log_population` (β₃):** The coefficient is **1.1576**. This is also an *elasticity*. For each **1% increase** in population, we expect a **1.16% increase** in digital exports.
+            # --- Display R-squared and Observations ---
+            col_a, col_b = st.columns(2)
+            col_a.metric("R-squared", f"{results_ols.rsquared:.3f}")
+            col_b.metric("Observations", f"{int(results_ols.nobs)}")
 
-            ---
-            ##### 3. Key Statistics:
-            *   **Significance (***):** The stars confirm that all our results are highly statistically significant and not due to random chance.
-            *   **R-squared:** Our model explains **63.1%** of the variation in digital service exports.
-            """)
+            # --- CORRECTED Expander for Interpretation ---
+            with st.expander("How to Interpret These Results"):
+                st.markdown("""
+                ##### 1. The Model Equation:
+                ```
+                log(Digital Exports) = β₀ + β₁*(Internet Usage %) + β₂*log(GDP) + β₃*log(Population)
+                ```
+                This model helps us understand how different factors relate to a country's digital exports.
 
-        # --- CORRECTED Expander for the Full Raw Output ---
-        with st.expander("View Full OLS Summary Table"):
-            st.code(str(results_ols.summary()), language='text')
+                ---
+                ##### 2. Interpreting the Coefficients:
+                *   **`internet_usage_pct` (β₁):** The coefficient is **0.0109**. This means that for each **1 percentage point increase** in a country's internet usage, we expect to see a **1.09% increase** in its digital service exports, holding other factors constant.
 
-    except FileNotFoundError:
-        st.error("The regression data file ('final_panel_for_regression.csv') was not found.")
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
+                *   **`log_gdp_per_capita` (β₂):** The coefficient is **1.4666**. This is an *elasticity*. For each **1% increase** in GDP per capita, we expect a **1.47% increase** in digital exports.
+
+                *   **`log_population` (β₃):** The coefficient is **1.1576**. This is also an *elasticity*. For each **1% increase** in population, we expect a **1.16% increase** in digital exports.
+
+                ---
+                ##### 3. Key Statistics:
+                *   **Significance (***):** The stars confirm that all our results are highly statistically significant and not due to random chance.
+                *   **R-squared:** Our model explains **63.1%** of the variation in digital service exports.
+                """)
+
+            # --- CORRECTED Expander for the Full Raw Output ---
+            with st.expander("View Full OLS Summary Table"):
+                st.code(str(results_ols.summary()), language='text')
+
+        except FileNotFoundError:
+            st.error("The regression data file ('final_panel_for_regression.csv') was not found.")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
 
 
 
@@ -459,8 +468,8 @@ with col2:
 
 
 
-st.write("---")
+    st.write("---")
 
-st.header("Do countries with higher technology adoption export more digital services?")
+    st.header("Do countries with higher technology adoption export more digital services?")
 
-st.write("---")
+    st.write("---")
