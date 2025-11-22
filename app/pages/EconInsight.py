@@ -286,3 +286,50 @@ else:
     st.warning("Please select at least one country to visualize its evolution.")
 
 
+st.header("Bar Chart Race: The Shifting Top 10")
+
+# We can reuse the df_filtered from the top of your script, but this time for all years
+race_df = df_final_country_data[
+    (df_final_country_data['indicator_name'] == indicator_choice) &
+    (df_final_country_data['rank'] <= 10) # Only show the Top 10
+]
+
+fig_race = px.bar(
+    race_df,
+    x="value_true",
+    y="country_name",
+    orientation='h',
+    color="country_name",
+    animation_frame="year",
+    animation_group="country_name",
+    text="country_name",
+    title=f"Top 10 {indicator_choice.replace('_', ' ')} from 2010-2023",
+
+    labels= {
+        "value_true": "Trade Value (USD)",
+        "country_name" :"Country"
+        }
+)
+# --- ADD THIS SNIPPET TO CONTROL THE SPEED ---
+
+# The duration is in milliseconds (ms). 
+# 1000ms = 1 second.
+# A good value is between 500ms and 1500ms per frame.
+frame_duration = 1000  # Set the duration for each year's frame (e.g., 1 second)
+transition_duration = 300 # The time it takes to animate between frames (e.g., 0.3 seconds)
+
+
+
+# Improve layout and sort bars for each frame
+fig_race.update_layout(
+    yaxis={'categoryorder':'total ascending'},
+    paper_bgcolor='rgba(0,0,0,0)',
+    plot_bgcolor='rgba(0,0,0,0)',
+    font_color='white',
+    showlegend=False
+)
+
+
+fig_race.update_traces(texttemplate=None) # Hide text on bars if it's cluttered
+
+st.plotly_chart(fig_race, use_container_width=True)
