@@ -884,44 +884,84 @@ This final visualization shows the relationship between internet usage and digit
     # We load it again to ensure this section is self-contained
     df_animated_plot = pd.read_csv(IN_QUESTION1/ "final_panel_for_regression.csv")
     df_animated_plot['year'] = df_animated_plot['year'].astype(int)
+
+    df_animated_plot['Exports_Corrected'] = df_animated_plot['Exports_Digital_Service'] / 1_000_000
     
+    def format_billions(n):
+        billions = n / 1_000_000_000
+        return f"${billions:.1f} Billion"
+
+    df_animated_plot['Exports_Hover_Text'] = df_animated_plot['Exports_Corrected'].apply(format_billions)
+
+    # --- Create the 'Status' column ---
     status_map = {1: 'Developing', 0: 'Developed'}
     df_animated_plot['Status'] = df_animated_plot['is_developing'].map(status_map)
+
     # --- 2. Create the Animated Scatter Plot ---
     fig_animated_scatter = px.scatter(
         df_animated_plot.sort_values('year'),
         x="internet_usage_pct",
-        y="Exports_Digital_Service",
+        y="Exports_Corrected",  # <-- USE THE CORRECTED COLUMN FOR THE Y-AXIS
         animation_frame="year",
         animation_group="country_name_x",
         size="population",
         color="Status",
         hover_name="country_name_x",
-        log_y=True, # Use a log scale for better visualization
+        custom_data=['Exports_Hover_Text'], # <-- PASS OUR CLEAN HOVER TEXT TO THE PLOT
+        log_y=True,
         size_max=60,
         labels={
             "internet_usage_pct": "Internet Usage (% of Population)",
-            "Exports_Digital_Service": "Digital Service Exports (Log Scale)",
-            "is_developing": "Devoloping Status (1= )"
+            "Exports_Corrected": "Digital Service Exports", # Label for the corrected y-axis
+            "Status": "Country Status"
         },
         title="The Race for Digital Dominance: Internet Adoption vs. Exports Over Time",
         color_discrete_map={
-        'Developed': '#00CC96',  # A nice green
-        'Developing': '#EF553B'   # A contrasting orange/red
-    }
-    # ------------------------------------
+            'Developed': '#00CC96',
+            'Developing': '#EF553B'
+        }
+    )
+
+    # --- FIX #3: CUSTOMIZE THE HOVER TEMPLATE ---
+    # This tells the plot to use our clean 'Exports_Hover_Text' instead of the raw number.
+    fig_animated_scatter.update_traces(
+    hovertemplate="""<b>%{hovertext}</b>  
+
+    Internet Usage: %{x:.1f}%  
+
+    Digital Exports: %{customdata[0]}
+    <extra></extra>"""
 )
+
     # --- 3. Improve the Layout ---
     fig_animated_scatter.update_layout(
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
-        legend_title_text=None
+        legend_title_text='Country Status'
     )
 
-    # --- 4. Display the Plot ---
+    # --- 4. Manually set the y-axis ticks. This will finally work. ---
+    fig_animated_scatter.update_yaxes(
+        type='log',
+        tickvals=[
+            100_000_000,      # $100 Million
+            1_000_000_000,      # $1 Billion
+            10_000_000_000,     # $10 Billion
+            100_000_000_000,    # $100 Billion
+            500_000_000_000     # $500 Billion
+        ],
+        ticktext=[
+            "$100M",
+            "$1B",
+            "$10B",
+            "$100B",
+            "$500B"
+        ]
+    )
+
+    # --- 5. Display the Plot ---
     st.plotly_chart(fig_animated_scatter, use_container_width=True)
 
     st.success("""
     **Conclusion:** Yes. The visual evidence is compelling. Countries that have successfully increased their internet adoption rates consistently show a strong corresponding growth in their digital service exports over the past two decades.
     """)
-
