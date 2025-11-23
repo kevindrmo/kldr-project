@@ -358,21 +358,119 @@ with tab2:
 
     col1, col2 = st.columns([1, 1])
 
-    with col1:
-        st.subheader("Interactive 3D Data Cloud")
-        
-        # Define the path to your saved HTML file
-        plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
+#    with col1:
+#        st.subheader("Interactive 3D Data Cloud")
+#        
+#        # Define the path to your saved HTML file
+#        plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
 
-        # --- This try/except block is for the 3D PLOT ---
-        try:
+#        # --- This try/except block is for the 3D PLOT ---
+#        try:
+        #     with open(plot_path_3d, 'r', encoding='utf-8') as f:
+        #         html_string = f.read()
+        #     components.html(html_string, height=600, scrolling=False)
+        # except FileNotFoundError:
+        #     st.warning(f"3D plot file not found at {plot_path_3d}. Please run the analysis notebook to generate it.")
+
+        # plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
+
+
+    with col1:
+        # --- Use session_state to track the view mode ---
+        if 'view_mode' not in st.session_state:
+            st.session_state.view_mode = 'all_years' # Default to your HTML plot
+
+        # --- Button to switch views ---
+        # We place the button at the top for easy access
+        if st.button("Switch View"):
+            if st.session_state.view_mode == 'all_years':
+                st.session_state.view_mode = 'per_year'
+            else:
+                st.session_state.view_mode = 'all_years'
+
+        # --- Display the selected view ---
+        if st.session_state.view_mode == 'all_years':
+            # --- THIS IS YOUR ORIGINAL, PREFERRED CODE ---
+            st.subheader("Interactive 3D Data Cloud (All Years)")
+            
+            # Define the path to your saved HTML file
+            plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
+
+            # Display the HTML file
             with open(plot_path_3d, 'r', encoding='utf-8') as f:
                 html_string = f.read()
             components.html(html_string, height=600, scrolling=False)
-        except FileNotFoundError:
-            st.warning(f"3D plot file not found at {plot_path_3d}. Please run the analysis notebook to generate it.")
+            st.caption("This view shows all data points across all years.")
 
-        plot_path_3d = IN_QUESTION1 / "interactive_3d_plot.html"
+        else: # This is the 'per_year' view
+            # --- THIS IS THE DYNAMIC PLOT CODE YOU PROVIDED ---
+            st.subheader("Interactive 3D Data Cloud (Per Year)")
+
+            # Load the data
+            df_plot = pd.read_csv(IN_QUESTION1 / "final_panel_for_regression.csv")
+            df_plot['year'] = df_plot['year'].astype(int)
+            df_plot['log_gdp_per_capita'] = np.log(df_plot['gdp_per_capita'] + 1)
+            df_plot['log_population'] = np.log(df_plot['population'] + 1)
+
+            # Create a placeholder for the plot
+            plot_placeholder = st.empty()
+
+            # Create the interactive widgets
+            st.markdown("---")
+            st.markdown("##### Explore the Data")
+
+            all_countries = sorted(df_plot['country_name_x'].unique())
+            all_years = sorted(df_plot['year'].unique(), reverse=True)
+            top_10_countries = df_plot.groupby('country_name_x')['Exports_Digital_Service'].max().nlargest(10).index.tolist()
+
+            selected_countries = st.multiselect(
+                "Select countries to highlight:",
+                options=all_countries,
+                default=top_10_countries
+            )
+
+            selected_year = st.slider(
+                "Select a year:",
+                min_value=min(all_years),
+                max_value=max(all_years),
+                value=2010
+            )
+
+            # Filter the data
+            df_year = df_plot[df_plot['year'] == selected_year].copy()
+            df_year.loc[:, 'Highlight'] = df_year['country_name_x'].apply(
+                lambda x: 'Highlighted' if x in selected_countries else 'Other Countries'
+            )
+
+            # Populate the placeholder with the plot
+            if df_year.empty:
+                plot_placeholder.warning(f"No data available for the year {selected_year}.")
+            else:
+                fig_3d = px.scatter_3d(
+                    df_year,
+                    x='internet_usage_pct',
+                    y='log_gdp_per_capita',
+                    z='Exports_Digital_Service',
+                    color='Highlight',
+                    size='population',
+                    hover_name='country_name_x',
+                    hover_data={'year': True, 'Highlight': False},
+                    color_discrete_map={
+                        'Highlighted': '#EF553B',
+                        'Other Countries': '#636EFA'
+                    },
+                    title=f"Digital Economy Landscape in {selected_year}"
+                )
+                fig_3d.update_layout(
+                    height=600,
+                    margin=dict(l=0, r=0, b=0, t=40),
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    legend_title_text=None
+                )
+                plot_placeholder.plotly_chart(fig_3d, use_container_width=True)
+
+
 
     with col2:
         st.subheader("Baseline OLS Model Results")
@@ -573,17 +671,7 @@ with tab2:
         """)
 
 
-
-
-
-
-
-    st.write("---")
-
-    st.header("Do countries with higher technology adoption export more digital services?")
-    # In your EconInsight.py file, inside the "Q2" tab
-
-    # ... (after the interactive section and the detailed expander) ...
+    st.header("Panel Data Model")
 
     st.write("---")
     st.subheader("The Solution: Comparing Panel Data Models")
@@ -777,3 +865,15 @@ with tab2:
         ---
         **Conclusion:** The initial correlations we saw in the Standard OLS model were likely misleading. After applying robust panel data methods, we find that the story is much more complex. This demonstrates the critical importance of choosing the right econometric model.
         """)
+
+
+
+
+
+    st.write("---")
+
+    st.header("Do countries with higher technology adoption export more digital services?")
+    # In your EconInsight.py file, inside the "Q2" tab
+
+    # ... (after the interactive section and the detailed expander) ...
+
