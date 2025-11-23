@@ -873,7 +873,49 @@ with tab2:
     st.write("---")
 
     st.header("Do countries with higher technology adoption export more digital services?")
-    # In your EconInsight.py file, inside the "Q2" tab
+    st.header("Revisiting the Core Question: The Visual Answer")
+    st.markdown("""
+After all the complex modeling, what is the simple answer to our original question? Do countries with higher technology adoption export more digital services?
 
-    # ... (after the interactive section and the detailed expander) ...
+This final visualization shows the relationship between internet usage and digital exports over time. Press the **play button** to see the story unfold. The strong upward trend from left to right provides a clear, affirmative answer.
+""")
+
+    # --- 1. Load the data ---
+    # We load it again to ensure this section is self-contained
+    df_animated_plot = pd.read_csv(IN_QUESTION1/ "final_panel_for_regression.csv")
+    df_animated_plot['year'] = df_animated_plot['year'].astype(int)
+
+    # --- 2. Create the Animated Scatter Plot ---
+    fig_animated_scatter = px.scatter(
+        df_animated_plot.sort_values('year'),
+        x="internet_usage_pct",
+        y="Exports_Digital_Service",
+        animation_frame="year",
+        animation_group="country_name_x",
+        size="population",
+        color="is_developing",
+        hover_name="country_name_x",
+        log_y=True, # Use a log scale for better visualization
+        size_max=60,
+        labels={
+            "internet_usage_pct": "Internet Usage (% of Population)",
+            "Exports_Digital_Service": "Digital Service Exports (Log Scale)",
+            "is_developing": "Country Status"
+        },
+        title="The Race for Digital Dominance: Internet Adoption vs. Exports Over Time"
+    )
+
+    # --- 3. Improve the Layout ---
+    fig_animated_scatter.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        legend_title_text=None
+    )
+
+    # --- 4. Display the Plot ---
+    st.plotly_chart(fig_animated_scatter, use_container_width=True)
+
+    st.success("""
+    **Conclusion:** Yes. The visual evidence is compelling. Countries that have successfully increased their internet adoption rates consistently show a strong corresponding growth in their digital service exports over the past two decades.
+    """)
 
