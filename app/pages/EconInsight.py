@@ -884,7 +884,9 @@ This final visualization shows the relationship between internet usage and digit
     # We load it again to ensure this section is self-contained
     df_animated_plot = pd.read_csv(IN_QUESTION1/ "final_panel_for_regression.csv")
     df_animated_plot['year'] = df_animated_plot['year'].astype(int)
-
+    
+    status_map = {1: 'Developing', 0: 'Developed'}
+    df_animated_plot['Status'] = df_animated_plot['is_developing'].map(status_map)
     # --- 2. Create the Animated Scatter Plot ---
     fig_animated_scatter = px.scatter(
         df_animated_plot.sort_values('year'),
@@ -893,18 +895,22 @@ This final visualization shows the relationship between internet usage and digit
         animation_frame="year",
         animation_group="country_name_x",
         size="population",
-        color="is_developing",
+        color="Status",
         hover_name="country_name_x",
         log_y=True, # Use a log scale for better visualization
         size_max=60,
         labels={
             "internet_usage_pct": "Internet Usage (% of Population)",
             "Exports_Digital_Service": "Digital Service Exports (Log Scale)",
-            "is_developing": "Country Status"
+            "is_developing": "Devoloping Status (1= )"
         },
-        title="The Race for Digital Dominance: Internet Adoption vs. Exports Over Time"
-    )
-
+        title="The Race for Digital Dominance: Internet Adoption vs. Exports Over Time",
+        color_discrete_map={
+        'Developed': '#00CC96',  # A nice green
+        'Developing': '#EF553B'   # A contrasting orange/red
+    }
+    # ------------------------------------
+)
     # --- 3. Improve the Layout ---
     fig_animated_scatter.update_layout(
         plot_bgcolor='rgba(0,0,0,0)',
