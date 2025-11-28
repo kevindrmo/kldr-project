@@ -694,7 +694,6 @@ with tab2:
                 full_results_text = f.read()
             
             # --- THIS IS THE FIX  ---> We fix it with st.code !! 
-            # Use st.code() to guarantee a monospace font and preserve alignment.
             st.code(full_results_text, language='text')
 
         except FileNotFoundError:
