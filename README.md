@@ -49,7 +49,7 @@ The analysis is based on a comprehensive panel dataset compiled from primary pub
 | `population` | Total population | World Bank |
 | `is_developing` | Development status classification | World Bank |
 
-The final dataset covers approximately 150 countries over a span from 2010 to 2023. We utilized the `wbdata` Python library to systematically account for missing values in the main dataset.
+The final dataset covers approximately 150 countries over a span from 2010 to 2023. I utilized the [`wbdata`](https://wbdata.readthedocs.io/en/stable/) Python library to systematically account for missing values in the main dataset.
 
 **Primary Data Source:** [World Bank Data (UNCTAD_DE)](https://data.worldbank.org/ )
 
