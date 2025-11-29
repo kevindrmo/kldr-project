@@ -49,3 +49,29 @@ st.markdown("""
     <p class="econviz-subtitle">Transforming Economic Data into Visual Stories</p>
     <p class="econviz-tagline">Where Data Meets Art</p>
 """, unsafe_allow_html=True)
+
+
+tab1, tab2, tab3 = st.tabs([
+    "Q3: The Digital Divide", 
+    "Q4: Regional Growth Impact",
+    "Summary" 
+])
+
+
+with tab1:
+    st.title("📡 Question 3: The Digital Divide")
+    st.subheader("Is the gap between developed and developing countries closing?")
+
+
+    st.subheader(" How are adoption rates changing over time?")
+
+
+
+
+with tab2:
+    st.title("💡 Question 4: Regional Growth Impact")
+    st.subheader("Which regions are leading digital transformation?")
+
+
+
+    st.subheader("How are digital service exports growing by region?")

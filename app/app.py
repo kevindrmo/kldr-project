@@ -23,7 +23,7 @@ homepage1 =st.Page("pages/homepage1.py",
                 icon="🏠")
 
 homepage2 =st.Page("pages/homepage2.py",
-                title= "Homepage2",
+                title= "Homepage",
                 icon="🏠")
 
 
@@ -44,7 +44,7 @@ econviz_page = st.Page("pages/EconViz.py",
                     icon= "🔮")
 
 
-user_pages = [homepage1, homepage2, must_know_page, data_assistant, data_page, econinsight_page, econviz_page]
+user_pages = [homepage2, must_know_page, data_assistant, data_page, econinsight_page, econviz_page]
 
 pg = st.navigation(user_pages, position="sidebar", expanded=True)
 

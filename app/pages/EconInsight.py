@@ -56,9 +56,10 @@ st.markdown("""
     <p class="econinsight-tagline">AI-Powered Data Understanding</p>
 """, unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs([
+tab1, tab2, tab3= st.tabs([
     "Q1: Global Leaders Analysis", 
     "Q2: Adoption vs. Exports Analysis", 
+    "Summary"
 ])
 
 with tab1:
