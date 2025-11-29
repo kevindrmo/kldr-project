@@ -1,5 +1,16 @@
-streamlit
-pandas
-numpy
-matplotlib
-plotly.express
+# Core Application & Data Manipulation
+streamlit==1.33.0
+pandas==2.1.3
+numpy==1.26.2
+
+# Data Visualization
+matplotlib==3.8.2
+plotly==5.18.0
+
+# Econometric Modeling
+statsmodels==0.14.1
+linearmodels==5.3
+
+# Data Acquisition & Image Processing
+wbdata==0.2.9
+Pillow==10.1.0
