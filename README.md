@@ -23,14 +23,17 @@ This project answers two primary questions:
 
 ## Data Overview
 
-The analysis is based on a comprehensive panel dataset compiled from two primary public sources:
+The analysis is based on a comprehensive panel dataset compiled from a primary public source:
 
-1.  **The World Bank:** Provided core economic indicators such as GDP per capita, population, and country development status.
-2.  **The OECD:** Served as the source for key technology and trade variables, including internet usage percentage, and detailed import/export data for digital services.
+**The World Bank:** 
+Provided core economic indicators such as GDP per capita, population, and country development status.
+Served as the source for key technology and trade variables, including internet usage percentage, and detailed import/export data for digital services.
 
-The final dataset covers approximately 150 countries over a span from 2005 to 2020. The key variables used include `Exports_Digital_Service`, `internet_usage_pct`, `gdp_per_capita`, `population`, and `is_developing`.
+The final dataset covers approximately 150 countries over a span from 201' to 2023. The key variables used include `Exports_Digital_Service`, `internet_usage_pct`, `gdp_per_capita`, `population`, and `is_developing`.
 
-*   **Data Source Link (OECD Stats):** [https://stats.oecd.org/](https://stats.oecd.org/ )
+The wbdata python-library made it possible to account for missing values in the main dataset (UNCTAD_DE_WIDEF.csv)
+
+*   **Data Source Link (World Bank Data):** https://data360.worldbank.org/en/dataset/UNCTAD_DE
 
 ---
 
