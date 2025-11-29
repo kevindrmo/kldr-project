@@ -112,8 +112,8 @@ To run the dashboard locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/EconInsight.git
-    cd EconInsight
+    git clone https://github.com/yourusername/kldr-project.git
+    cd kldr-project
     ```
 
 2.  **Install dependencies:**
@@ -128,10 +128,5 @@ To run the dashboard locally:
 
 ---
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/EconInsight/issues ).
-
-<p align="center">
-<sub>Built with ❤️ by [Your Name] for the Programming with Data Course</sub>
+<sub>Built with ❤️ by Kevin for Data Analysis with Python Course of University of Zurich</sub>
 </p>
