@@ -2,7 +2,7 @@
 
 ## An Analysis of Global Digital Trade and Technology Adoption
 
-*Exploring the key drivers and leaders of the digital service economy from 2005 to 2020.*
+*Exploring the key drivers and leaders of the digital service economy from 2010 to 2023.*
 
 This repository contains the data, analysis notebooks, and Streamlit web application for the "Programming with Data" final project. The project investigates the landscape of global digital trade and examines the econometric relationship between technology adoption and digital service exports.
 
