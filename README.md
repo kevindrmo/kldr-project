@@ -8,6 +8,17 @@ This repository contains the data, analysis notebooks, and Streamlit web applica
 
 ---
 
+## 📋 Table of Contents
+
+1.  [Key Research Questions](#-key-research-questions)
+2.  [Data Overview](#-data-overview)
+3.  [Technical Implementation](#️-technical-implementation)
+4.  [Project Structure](#-project-structure)
+5.  [Usage](#-usage)
+6.  [Contributing](#-contributing)
+
+---
+
 ## 🚀 Key Research Questions
 
 This project answers two primary questions:
