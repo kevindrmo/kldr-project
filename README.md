@@ -6,6 +6,16 @@
 
 This repository contains the data, analysis notebooks, and Streamlit web application for the "Programming with Data" final project. The project investigates the landscape of global digital trade and examines the econometric relationship between technology adoption and digital service exports.
 
+## ✨ Featured Visualization: Interactive 3D Data Cloud
+
+To showcase the relationship between Internet Usage, GDP, and Digital Service Exports, we created a fully interactive 3D scatter plot using Plotly. The GIF below demonstrates the interactivity.
+
+
+  ![Interactive 3D Plot Demo](app/data/output/3dplot_data_cloud.gif)
+
+
+---
+
 ---
 
 ## 📋 Table of Contents
