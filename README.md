@@ -1,3 +1,5 @@
+![Titles Gif](app/data/titles_combined.gif)
+
 # 💡EconInsight & 🔮EconViz
 
 ## An Analysis of Global Digital Trade and Technology Adoption
