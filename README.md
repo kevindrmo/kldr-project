@@ -1,4 +1,4 @@
-![Titles Gif](app/data/titles_combined.gif)
+![Titles Gif](app/data/titles.gif)
 
 # 💡EconInsight & 🔮EconViz
 
