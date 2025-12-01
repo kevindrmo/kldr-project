@@ -258,26 +258,26 @@ st.markdown("""
 
 **Result:** Clean, organized data that's ready for analysis, visualization, and AI interpretation!
 """)
-st.markdown("""
----
-## Methodology: Appliance of the rules on a Dataset
-### 🧰 A simple example for Data-cleansing and applying the tidy-data concept
-#### 💾 1 Raw Dataset:
-            """)
+# st.markdown("""
+# ---
+# ## Methodology: Appliance of the rules on a Dataset
+# ### 🧰 A simple example for Data-cleansing and applying the tidy-data concept
+# #### 💾 1 Raw Dataset:
+#             """)
 
-ROOT  = Path(__file__).parent.parent
+# ROOT  = Path(__file__).parent.parent
 
-df_disney_raw = pd.read_csv(ROOT/"data"/ "disney_movies_clean.csv")
+# df_disney_raw = pd.read_csv(ROOT/"data"/ "disney_movies_clean.csv")
 
-st.dataframe(df_disney_raw.head(20))
+# st.dataframe(df_disney_raw.head(20))
 
-st.markdown("""
-However with this unorganized dataset, we're not quite able to do something with it 
-either is it interpreting or to do some calculation with it, we have alter its structure in order do get some more insght
-            """)
+# st.markdown("""
+# However with this unorganized dataset, we're not quite able to do something with it 
+# either is it interpreting or to do some calculation with it, we have alter its structure in order do get some more insght
+#             """)
 
-st.markdown("""
-#### 🔍 2 Inspecting the Dataset:
-        - Using .describe() gives us the variables --> since columns are """)
+# st.markdown("""
+# #### 🔍 2 Inspecting the Dataset:
+#         - Using .describe() gives us the variables --> since columns are """)
 
 

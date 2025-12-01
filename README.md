@@ -18,7 +18,6 @@ This repository contains the data, analysis notebooks, and Streamlit web applica
 3.  [Technical Implementation](#️-technical-implementation)
 4.  [Project Structure](#-project-structure)
 5.  [Usage](#-usage)
-6.  [Contributing](#-contributing)
 
 ---
 

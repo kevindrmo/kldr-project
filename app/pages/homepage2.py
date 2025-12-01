@@ -224,5 +224,5 @@ color_continuous_scale=['#0f3460', '#ff8800']
 
 st.markdown("""
 ---
-### **👉 Start exploring:** Use the sidebar to navigate to different analyses.
+### **👉 Start exploring:** Use the sidebar to navigate to different analyses
 """)

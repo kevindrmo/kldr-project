@@ -110,6 +110,8 @@ with tab1:
     elif st.session_state.q3_mode == "journalistic":
         st.button("← Back to Selection", on_click=reset_q3_mode, type="secondary")
 
+        st.title("📡 Question 3: The Digital Divide")
+        st.subheader("Is the gap between developed and developing countries closing?")
         years = list(range(2010, 2024))
         data = {
             'Year': years,
@@ -336,6 +338,71 @@ with tab1:
         <br>
         """, unsafe_allow_html=True)
 
+        st.markdown("---")
+        st.subheader("How are adoption rates changing over time?")
+        
+        st.markdown("A regional breakdown of the global catch-up in internet adoption.")
+
+# --- 1. Data Preparation ---
+# We use the same regional_data.csv file
+
+        df_regional = pd.read_csv(IN_QUESTION3/ "df_merged_for_DiD.csv")
+        df_regional['year'] = df_regional['year'].astype(int)
+        df_regional['internet_usage_pct'] = pd.to_numeric(df_regional['internet_usage_pct'], errors='coerce')
+
+        # Group by year and region to get the AVERAGE adoption rate
+        regional_adoption = df_regional.groupby(['year', 'region'])['internet_usage_pct'].mean().reset_index()
+
+
+            # --- STATIC, ARTISTIC VERSION ---
+        st.subheader("Static Infographic: The Pace of Adoption")
+
+        # Pivot data for Matplotlib
+
+
+        adoption_pivot = regional_adoption.pivot(index='year', columns='region', values='internet_usage_pct').fillna(0)
+        
+        COLOR_BG = '#0E1117'
+        COLOR_TEXT = '#FAFAFA'
+        COLOR_SUBTLE = '#4C566A'
+        # Create the Matplotlib figure
+        fig_static_adoption, ax = plt.subplots(figsize=(14, 10))
+        fig_static_adoption.set_facecolor(COLOR_BG) # Assuming COLOR_BG is defined
+        ax.set_facecolor(COLOR_BG)
+
+        # Define a color palette
+        colors = plt.cm.plasma(np.linspace(0, 1, len(adoption_pivot.columns)))
+
+        # Plot each region
+        for i, region in enumerate(adoption_pivot.columns):
+            ax.plot(adoption_pivot.index, adoption_pivot[region], color=colors[i], linewidth=2.5, label=region)
+
+        # --- Aesthetics ---
+        ax.spines[['top', 'right']].set_visible(False)
+        ax.spines[['left', 'bottom']].set_color(COLOR_SUBTLE)
+        ax.tick_params(colors=COLOR_TEXT, which='both', length=0)
+        ax.set_ylim(0, 100)
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f'{int(y)}%'))
+        
+        ax.grid(False)
+
+        # --- Storytelling ---
+        ax.text(0, 1.12, "The Race to Connect", transform=ax.transAxes, ha='left', fontsize=28, weight='bold', color=COLOR_TEXT)
+        ax.text(0, 1.05, "While North America started with a massive lead, South Asia and Sub-Saharan Africa show the steepest catch-up trajectories.", transform=ax.transAxes, ha='left', fontsize=16, color=COLOR_SUBTLE)
+
+        # Direct Labeling
+        for i, region in enumerate(adoption_pivot.columns):
+            ax.text(adoption_pivot.index[-1] + 0.2, adoption_pivot[region].iloc[-1], region, color=colors[i], va='center', ha='left', fontsize=12, weight='bold')
+
+        st.pyplot(fig_static_adoption)
+
+
+
+
+
+
+
+
     elif st.session_state.q3_mode == "interactive":
         st.button("← Back to Selection", on_click=reset_q3_mode, type="secondary")
 
@@ -417,199 +484,42 @@ with tab1:
 
 
 
-#     # --- 2. Create the "Artistic" Annotated Chart ---
-#     fig_story = go.Figure()
+        st.markdown("---")
+        st.subheader("How are adoption rates changing over time?")
+            # --- INTERACTIVE VERSION ---
+        df_regional = pd.read_csv(IN_QUESTION3/ "df_merged_for_DiD.csv")
+        df_regional['year'] = df_regional['year'].astype(int)
+        df_regional['internet_usage_pct'] = pd.to_numeric(df_regional['internet_usage_pct'], errors='coerce')
 
-#     # Data Traces
-#     fig_story.add_trace(go.Scatter(
-#         x=avg_adoption_wide['year'], y=avg_adoption_wide['Developed'],
-#         mode='lines', line=dict(color='#88C0D0', width=3), name='Developed Nations'
-#     ))
-#     fig_story.add_trace(go.Scatter(
-#         x=avg_adoption_wide['year'], y=avg_adoption_wide['Developing'],
-#         fill='tonexty', mode='lines', line=dict(color='#BF616A', width=3),
-#         name='Developing Nations', fillcolor='rgba(100, 100, 100, 0.2)'
-#     ))
+        # Group by year and region to get the AVERAGE adoption rate
+        regional_adoption = df_regional.groupby(['year', 'region'])['internet_usage_pct'].mean().reset_index()
 
-#     # --- Calculations for Annotations ---
-#     start_year = avg_adoption_wide['year'].min()
-#     end_year = avg_adoption_wide['year'].max()
-#     dev_start_val = avg_adoption_wide.loc[avg_adoption_wide['year'] == start_year, 'Developed'].iloc[0]
-#     dev_end_val = avg_adoption_wide.loc[avg_adoption_wide['year'] == end_year, 'Developed'].iloc[0]
-#     ing_start_val = avg_adoption_wide.loc[avg_adoption_wide['year'] == start_year, 'Developing'].iloc[0]
-#     ing_end_val = avg_adoption_wide.loc[avg_adoption_wide['year'] == end_year, 'Developing'].iloc[0]
-#     gap_start = dev_start_val - ing_start_val
-#     gap_end = dev_end_val - ing_end_val
+        
+        st.subheader("Interactive Line Chart: Regional Adoption Growth")
+        
+        fig_interactive_adoption = px.line(
+            regional_adoption,
+            x='year',
+            y='internet_usage_pct',
+            color='region',
+            title="Evolution of Internet Adoption by Region",
+            labels={
+                "year": "Year",
+                "internet_usage_pct": "Average Internet Adoption (%)",
+                "region": "Region"
+            },
+            markers=True
+        )
+        
+        fig_interactive_adoption.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font_color="#FAFAFA",
+            yaxis_range=[0, 100] # Adoption is a percentage
+        )
+        
+        st.plotly_chart(fig_interactive_adoption, use_container_width=True)
 
-#     # --- Annotations (Storytelling) ---
-#     #
-#     # THIS IS THE FIX. I AM USING TRIPLE QUOTES. THIS WILL WORK.
-#     #
-#     fig_story.add_annotation(
-#         x=start_year + 2, y=(dev_start_val + ing_start_val) / 2,
-#         text=f"""<b>The Initial Divide</b>  
-# {gap_start:.1f} points in {start_year}""",
-#         showarrow=True, arrowhead=2, arrowcolor="#ECEFF4", ax=-60, ay=-40,
-#         font=dict(color="#ECEFF4", size=12), bgcolor="rgba(0,0,0,0.5)"
-#     )
-#     fig_story.add_annotation(
-#         x=end_year - 2, y=(dev_end_val + ing_end_val) / 2,
-#         text=f"""<b>The Gap Narrows</b>  
-# {gap_end:.1f} points in {end_year}""",
-#         showarrow=True, arrowhead=2, arrowcolor="#ECEFF4", ax=60, ay=40,
-#         font=dict(color="#ECEFF4", size=12), bgcolor="rgba(0,0,0,0.5)"
-#     )
-
-#     # --- Layout and Styling ("Magazine" Look) ---
-#     fig_story.update_layout(
-#         title=dict(
-#             text="<b>The Digital Divide is Closing, But Slowly</b>",
-#             y=0.95, x=0.5, xanchor='center', yanchor='top', font=dict(size=24, color='#ECEFF4')
-#         ),
-#         plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
-#         yaxis_range=[0, 100], xaxis_title=None, yaxis_title="Avg. Internet Usage (%)",
-#         font=dict(color="#D8DEE9"),
-#         xaxis=dict(showgrid=False), yaxis=dict(gridcolor='#4C566A'),
-#         legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),
-#         margin=dict(b=100, t=80),
-#     )
-#     fig_story.add_annotation(
-#         text="Source: Analysis of World Bank and OECD data.", showarrow=False,
-#         xref='paper', yref='paper', x=0, y=-0.3, font=dict(size=10, color='#4C566A')
-#     )
-#     fig_story.add_annotation(
-#         text="Average internet adoption rate for developed vs. developing nations, 2010-2023.", showarrow=False,
-#         xref='paper', yref='paper', x=0.5, y=0.88, font=dict(size=14, color='#88C0D0')
-#     )
-
-#     # --- Display the Final, Polished Plot ---
-#     st.plotly_chart(fig_story, use_container_width=True)
-
-#     # --- Add a simple, clear conclusion below the chart ---
-#     st.success(f"""
-#     **Conclusion:** The visual analysis confirms that the digital divide is indeed closing. The gap in average internet adoption has shrunk from **{gap_start:.1f} percentage points** in {start_year} to **{gap_end:.1f} points** in {end_year}. However, a substantial gap remains, indicating that while progress is being made, full digital equity is still a distant goal.
-#     """)
-
-    #     # --- Data for plotting ---
-    # years = avg_adoption_wide['year']
-    # developed_line = avg_adoption_wide['Developed']
-    # developing_line = avg_adoption_wide['Developing']
-
-    # # --- 2. Create the "Magazine-Style" Matplotlib Chart ---
-    
-    # # Use a clean, modern style
-    # plt.style.use('seaborn-v0_8-darkgrid')
-
-    # # Create the figure and axes object
-    # fig, ax = plt.subplots(figsize=(12, 8))
-
-    # # --- Plotting the data ---
-    # # Plot the two main lines
-    # ax.plot(years, developed_line, color='#88C0D0', linewidth=2.5)
-    # ax.plot(years, developing_line, color='#BF616A', linewidth=2.5)
-
-    # # Fill the area between them to represent the "divide"
-    # ax.fill_between(years, developed_line, developing_line, color='#4C566A', alpha=0.3)
-
-    # # --- Aesthetics and "Chart Junk" Removal ---
-    # # Set background color
-    # fig.set_facecolor('#0E1117')
-    # ax.set_facecolor('#0E1117')
-
-    # # Remove the top and right spines (the box border)
-    # ax.spines['top'].set_visible(False)
-    # ax.spines['right'].set_visible(False)
-    # ax.spines['left'].set_color('#4C566A')
-    # ax.spines['bottom'].set_color('#4C566A')
-
-    # # Set color for ticks and labels
-    # ax.tick_params(colors='#D8DEE9', which='both')
-    # ax.set_ylabel("Average Internet Usage (%)", color='#D8DEE9', fontsize=12)
-    # ax.set_xlabel("Year", color='#D8DEE9', fontsize=12)
-    
-    # # Set a clear 0-100% Y-axis
-    # ax.set_ylim(0, 100)
-    # ax.set_xlim(years.min(), years.max())
-
-    # # --- Storytelling: Title, Subtitle, and Annotations ---
-    # # Main Title (Headline)
-    # ax.text(
-    #     x=0.0, y=1.1, s="The Digital Divide is Closing, But a Stark Gap Remains",
-    #     transform=ax.transAxes, ha='left', fontsize=22, color='#ECEFF4', weight='bold'
-    # )
-    # # Subtitle
-    # ax.text(
-    #     x=0.0, y=1.05, s="Average internet adoption rates for developed vs. developing nations, 2010-2023",
-    #     transform=ax.transAxes, ha='left', fontsize=14, color='#88C0D0'
-    # )
-
-    # # Direct Line Labeling (No Legend)
-    # ax.text(years.iloc[-1] + 0.2, developed_line.iloc[-1], 'Developed', color='#88C0D0', va='center', fontsize=12)
-    # ax.text(years.iloc[-1] + 0.2, developing_line.iloc[-1], 'Developing', color='#BF616A', va='center', fontsize=12)
-
-    # # Annotation for the gap
-    # gap_mid_year = years.iloc[len(years) // 2]
-    # gap_mid_value_dev = developed_line.iloc[len(years) // 2]
-    # gap_mid_value_ing = developing_line.iloc[len(years) // 2]
-    # ax.text(
-    #     gap_mid_year, (gap_mid_value_dev + gap_mid_value_ing) / 2, 'The Digital Divide',
-    #     ha='center', va='center', fontsize=14, color='white', weight='bold',
-    #     bbox=dict(facecolor='#4C566A', alpha=0.5, boxstyle='round,pad=0.5')
-    # )
-
-    # # Source and Credit
-    # ax.text(
-    #     x=0.0, y=-0.15, s="Source: Analysis of World Bank and OECD data",
-    #     transform=ax.transAxes, ha='left', fontsize=10, color='#4C566A'
-    # )
-
-    # # --- Display in Streamlit ---
-    # st.pyplot(fig)
-
-    # # --- Supporting KPIs and Conclusion (This part remains the same) ---
-    # st.write("---")
-    # st.subheader("Quantifying the Gap")
-    # start_year = avg_adoption_wide['year'].min()
-    # end_year = avg_adoption_wide['year'].max()
-    # gap_start = developed_line.iloc[0] - developing_line.iloc[0]
-    # gap_end = developed_line.iloc[-1] - developing_line.iloc[-1]
-
-    # kpi_col1, kpi_col2 = st.columns(2)
-    # with kpi_col1:
-    #     st.metric(label=f"Adoption Gap in {start_year}", value=f"{gap_start:.1f} percentage points")
-    # with kpi_col2:
-    #     st.metric(label=f"Adoption Gap in {end_year}", value=f"{gap_end:.1f} percentage points", delta=f"{gap_end - gap_start:.1f} points", delta_color="inverse")
-
-    # st.success(f"""
-    # **Conclusion:** The visual analysis confirms that the digital divide is indeed closing. The gap in average internet adoption has shrunk from **{gap_start:.1f} points** in {start_year} to **{gap_end:.1f} points** in {end_year}. However, a substantial gap remains, indicating that while progress is being made, full digital equity is still a distant goal.
-    # """)
-
-    # st.markdown("---")
-    # st.subheader("How are adoption rates changing over time?")
-
-# --- 1. SETUP & DATA PREPARATION ---
-# (Replace this with your actual data loading logic if you are loading from CSV)
-# Creating dummy data that mimics your screenshot for demonstration
-# --- 1. SETUP & DATA PREPARATION ---
-# Adjusted data to reflect a tighter convergence in recent years (closer to 8-10% gap)
-# --- 1. SETUP & DATA PREPARATION ---
-# Data updated precisely based on the provided dataset image
-# --- 1. SETUP & DATA PREPARATION ---
-    # Data updated precisely based on the provided dataset image
-
-# --- 1. SETUP & DATA PREPARATION ---
-# Data updated precisely based on the provided dataset image
-
-    st.markdown("---")
-    st.subheader("How are adoption rates changing over time?")
-
-
-    st.markdown("---")
-
-    st.markdown("---")
-
-
-    st.subheader(" How are adoption rates changing over time?")
 
 
 
@@ -617,6 +527,7 @@ with tab1:
 with tab2:
     st.title("💡 Question 4: Regional Growth Impact")
     st.subheader("Which regions are leading digital transformation?")
+    st.caption("This analysis compares the annual grwoth thrend of digital service exports for each region against a baseline")
 
 
 
