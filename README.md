@@ -46,7 +46,7 @@ This project answers two primary questions:
 > **Takeaway:** Yes, but the story is complex. While a strong positive visual correlation exists, our rigorous econometric analysis shows this simple relationship is misleading. After controlling for country-specific characteristics and global time-based shocks using a Two-Way Fixed Effects model, the direct impact of internet usage becomes statistically insignificant, highlighting the importance of advanced modeling to avoid false conclusions.
 
 ![Internet Usage Significance](app/data/internet_usage_significance.png)
-
+![Regression Ouput Table](app/data/panel_regression_output_table.png)
 *(The final 2 questions are currently under development)*
 
 ---
