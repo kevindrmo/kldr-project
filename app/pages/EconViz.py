@@ -396,6 +396,20 @@ with tab1:
 
         st.pyplot(fig_static_adoption)
 
+        st.success("""
+    **Key Takeaways: The Regional Race to Connect**
+
+    The visual analysis of regional adoption rates reveals a multi-speed world, telling a more nuanced story than the simple "developed vs. developing" divide.
+
+    *   **The Forerunners:** **North America** and **Europe & Central Asia** began the period with a commanding lead and have since approached near-total saturation, with adoption rates now plateauing above 90%.
+
+    *   **The Great Accelerators:** The most dramatic story is the explosive growth in **South Asia** and **Sub-Saharan Africa**. Starting from the lowest bases, these regions exhibit the steepest growth curves, demonstrating a powerful catch-up effect driven by the proliferation of mobile technology.
+
+    *   **The Steady Climbers:** **East Asia & Pacific** and **Latin America & Caribbean** show consistent, strong growth, successfully closing the gap and positioning themselves as major digital economies.
+
+    **Conclusion:** While every region is moving in the right direction, the *pace* of change is the real story. The data strongly suggests that the next billion internet users will come primarily from South Asia and Sub-Saharan Africa, fundamentally reshaping the global digital landscape.
+""")
+
 
 
 
@@ -519,6 +533,19 @@ with tab1:
         )
         
         st.plotly_chart(fig_interactive_adoption, use_container_width=True)
+        st.success("""
+    **Key Takeaways: The Regional Race to Connect**
+
+    The visual analysis of regional adoption rates reveals a multi-speed world, telling a more nuanced story than the simple "developed vs. developing" divide.
+
+    *   **The Forerunners:** **North America** and **Europe & Central Asia** began the period with a commanding lead and have since approached near-total saturation, with adoption rates now plateauing above 90%.
+
+    *   **The Great Accelerators:** The most dramatic story is the explosive growth in **South Asia** and **Sub-Saharan Africa**. Starting from the lowest bases, these regions exhibit the steepest growth curves, demonstrating a powerful catch-up effect driven by the proliferation of mobile technology.
+
+    *   **The Steady Climbers:** **East Asia & Pacific** and **Latin America & Caribbean** show consistent, strong growth, successfully closing the gap and positioning themselves as major digital economies.
+
+    **Conclusion:** While every region is moving in the right direction, the *pace* of change is the real story. The data strongly suggests that the next billion internet users will come primarily from South Asia and Sub-Saharan Africa, fundamentally reshaping the global digital landscape.
+""")
 
 
 

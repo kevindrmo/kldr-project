@@ -152,7 +152,7 @@ To run the dashboard locally:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/kldr-project.git
+    git clone https://github.com/kevindrmo/kldr-project.git
     cd kldr-project
     ```
 
