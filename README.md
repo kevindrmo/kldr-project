@@ -153,5 +153,5 @@ To run the dashboard locally:
 
 ---
 
-<sub>Built with ❤️ by Kevin for Data Analysis with Python Course of University of Zurich</sub>
+<sub>Built by Kevin Di Raimo for the Data Analysis with Python Course of University of Zurich</sub>
 </p>
