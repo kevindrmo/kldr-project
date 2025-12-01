@@ -1,0 +1,37 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:            log_exports   R-squared:                       0.204
+Model:                            OLS   Adj. R-squared:                  0.200
+Method:                 Least Squares   F-statistic:                     46.37
+Date:                Mon, 01 Dec 2025   Prob (F-statistic):          1.31e-106
+Time:                        14:51:27   Log-Likelihood:                -6305.7
+No. Observations:                2367   AIC:                         1.264e+04
+Df Residuals:                    2353   BIC:                         1.272e+04
+Df Model:                          13                                         
+Covariance Type:            nonrobust                                         
+=======================================================================================================================================
+                                                                          coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------------------------------------------------------------
+Intercept                                                              32.2046      0.338     95.333      0.000      31.542      32.867
+C(region)[T.Europe & Central Asia]                                      3.3056      0.425      7.770      0.000       2.471       4.140
+C(region)[T.Latin America & Caribbean ]                                 0.7667      0.466      1.645      0.100      -0.147       1.681
+C(region)[T.Middle East, North Africa, Afghanistan & Pakistan]          2.0884      0.523      3.991      0.000       1.062       3.115
+C(region)[T.North America]                                              4.9686      1.094      4.540      0.000       2.822       7.115
+C(region)[T.South Asia]                                                 1.3920      0.845      1.648      0.100      -0.264       3.048
+C(region)[T.Sub-Saharan Africa ]                                       -0.3736      0.434     -0.860      0.390      -1.226       0.478
+time                                                                    0.0795      0.046      1.716      0.086      -0.011       0.170
+time:C(region)[T.Europe & Central Asia]                                 0.0148      0.057      0.258      0.797      -0.098       0.127
+time:C(region)[T.Latin America & Caribbean ]                           -0.0385      0.063     -0.607      0.544      -0.163       0.086
+time:C(region)[T.Middle East, North Africa, Afghanistan & Pakistan]     0.0027      0.072      0.038      0.970      -0.138       0.144
+time:C(region)[T.North America]                                         0.1416      0.155      0.912      0.362      -0.163       0.446
+time:C(region)[T.South Asia]                                           -0.0542      0.111     -0.489      0.625      -0.272       0.163
+time:C(region)[T.Sub-Saharan Africa ]                                  -0.0648      0.060     -1.072      0.284      -0.183       0.054
+==============================================================================
+Omnibus:                     2383.598   Durbin-Watson:                   0.325
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):           198271.751
+Skew:                          -4.726   Prob(JB):                         0.00
+Kurtosis:                      46.830   Cond. No.                         133.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
