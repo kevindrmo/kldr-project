@@ -108,7 +108,8 @@ KLDR-Project/
 │   │   ├── 📁 output/         # Processed data from notebooks, ready for visualization
 │   │   │   ├── 📁 question1/
 │   │   │   ├── 📁 question2_paneldata/
-│   │   │   └── 📁 question3/
+│   │   │   ├── 📁 question3/
+│   │   │   └── 📁 question4
 │   │   └── 📁 tables/         # Other miscellaneous data tables
 │   ├── 📁 pages/              # Each .py file here is a separate page/tab in the Streamlit app
 │   │   ├── 📄 data_assistant.py
