@@ -55,6 +55,11 @@ This project answers two primary questions:
 
 ![The Great Convergence](app/data/digital_convergence.png)
 
+**4. 💡 Regional Growth Impact**
+> *Which regions are leading digital transformation? How are digital service exports growing by region?*
+>
+> **Takeaway:** insert text
+
 
 
 ---
@@ -109,7 +114,7 @@ KLDR-Project/
 │   │   │   ├── 📁 question1/
 │   │   │   ├── 📁 question2_paneldata/
 │   │   │   ├── 📁 question3/
-│   │   │   └── 📁 question4
+│   │   │   └── 📁 question4/
 │   │   └── 📁 tables/         # Other miscellaneous data tables
 │   ├── 📁 pages/              # Each .py file here is a separate page/tab in the Streamlit app
 │   │   ├── 📄 data_assistant.py
