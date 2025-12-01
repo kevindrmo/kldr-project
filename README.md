@@ -38,6 +38,8 @@ This project answers two primary questions:
 >
 > **Takeaway:** A small group of developed nations, including Ireland, the United States, and Germany, consistently dominate the top ranks. However, the animated bar chart race reveals a dynamic mid-tier, with countries like China and India demonstrating significant upward momentum over the last decade.
 
+[Barchart Race](app/data/barchart_race.gif)
+
 **2. ⚙️ Technology Adoption & Trade**
 > *Is there a relationship between internet adoption and digital service exports?*
 >
