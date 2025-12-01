@@ -33,7 +33,7 @@ To showcase the relationship between Internet Usage, GDP, and Digital Service Ex
 
 ## 🚀 Key Research Questions
 
-This project answers two primary questions:
+This project answers four primary questions:
 
 **1. 🌍 Global Digital Trade Landscape**
 > *Which countries lead in digital service exports and how has this evolved?*
