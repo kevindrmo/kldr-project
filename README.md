@@ -47,7 +47,15 @@ This project answers two primary questions:
 
 ![Internet Usage Significance](app/data/internet_usage_significance.png)
 ![Regression Ouput Table](app/data/panel_regression_output_table.png)
-*(The final 2 questions are currently under development)*
+
+**3. 📡 The Digital Divide**
+> *Is the gap between developed and developing countries closing? How are adoption rates changing over time?*
+>
+> **Takeaway:** insert text
+
+![The Great Convergence](app/data/digital_convergence.png)
+
+
 
 ---
 
