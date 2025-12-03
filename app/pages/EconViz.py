@@ -70,10 +70,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-tab1, tab2, tab3 = st.tabs([
+tab1, tab2 = st.tabs([
     "Q3: The Digital Divide", 
     "Q4: Regional Growth Impact",
-    "Summary" 
 ])
 
 

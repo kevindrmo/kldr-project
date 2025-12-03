@@ -120,7 +120,7 @@ I explore this through 4 key analyses:
 1. **Global Digital Trade** - Which countries lead?
 2. **Technology Adoption** - How are businesses adapting?
 3. **Digital Divide** - Is the gap closing?
-4. **Development Impact** - Does it correlate with growth?
+4. **Regional Impact** - Does it correlate with growth?
 """)
 
 # Load clean data

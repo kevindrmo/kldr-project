@@ -135,8 +135,6 @@ KLDR-Project/
 ├── 📄 .gitignore               # Specifies files and folders for Git to ignore
 ├── 📄 README.md                # This project documentation file
 ├── 📄 requirements.txt         # List of Python libraries required for the project
-├── 📄 test.ipynb               # A Jupyter notebook for testing and experimentation
-└── 📄 test.txt                 # A simple text file for notes or tests
 
 ```
 
