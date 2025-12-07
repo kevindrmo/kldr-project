@@ -81,6 +81,12 @@ The final dataset covers approximately 150 countries over a span from 2010 to 20
 
 **Primary Data Source:** [World Bank Data (UNCTAD_DE)](https://data.worldbank.org/ )
 
+**The Raw Datasets**
+![Raw_DataSets_picture](app/data/Data%20Overview_pic.png)
+
+**The Methodology of my project**
+![Methodology](app/data/data_overview_methodology.png)
+
 ---
 
 ## 🛠️ Technical Implementation
