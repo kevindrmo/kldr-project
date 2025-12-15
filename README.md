@@ -52,14 +52,24 @@ This project answers four primary questions:
 **3. 📡 The Digital Divide**
 > *Is the gap between developed and developing countries closing? How are adoption rates changing over time?*
 >
-> **Takeaway:** insert text
+> **Takeaway:** The gap is closing rapidly. The difference in average internet adoption between developed and developing nations has shrunk significantly, driven by high-percentage grwoth in the Global South.
+
+![Choose_overview](app/data/q3_overview.png)
+
+**Journalistic Narrative**
 
 ![The Great Convergence](app/data/digital_convergence.png)
+
+**Analytical Overview**
+
+![Analytical Overview](app/data/analytical_overview.png)
 
 **4. 💡 Regional Growth Impact**
 > *Which regions are leading digital transformation? How are digital service exports growing by region?*
 >
-> **Takeaway:** insert text
+> **Takeaway:** The DiD analysis shows the established leaders are accelerating their lead. North America and Europe have a statistically significant, faster annual growth trend in digital exports compared to the baseline.
+
+![q4 overview](app/data/q4_overview.png)
 
 
 
